@@ -1,8 +1,8 @@
 package cn.metaq.sqlbuilder.step;
 
-import cn.metaq.sqlbuilder.SqlBuilderStep;
-import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
-import cn.metaq.sqlbuilder.jackson.databind.SqlBuilderStepDeserializer;
+import cn.metaq.sqlbuilder.SqlbuilderStep;
+import cn.metaq.sqlbuilder.constants.SqlbuilderStepType;
+import cn.metaq.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
 import cn.metaq.sqlbuilder.model.CustomQuery;
 import cn.metaq.sqlbuilder.model.UnionField;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -31,7 +31,7 @@ public class UnionStep extends AbstractStep {
     /**
      * 类型
      */
-    private SqlBuilderStepType type = SqlBuilderStepType.UNION;
+    private SqlbuilderStepType type = SqlbuilderStepType.UNION;
 
     /**
      * union 字段
@@ -41,14 +41,14 @@ public class UnionStep extends AbstractStep {
     /**
      * 左集
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep left;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep left;
 
     /**
      * 右集
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep right;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep right;
 
     private String alias;
 
@@ -58,46 +58,20 @@ public class UnionStep extends AbstractStep {
         SelectQuery lsq = new SelectQuery();
         SelectQuery rsq = new SelectQuery();
 
-        if (SqlBuilderStepType.TABLE.equals(left.getType())) {
+        if (SqlbuilderStepType.TABLE.equals(left.getType())) {
 
             DbTable ldt = schema.addTable(((TableStep) left).getTable_name());
             ((TableStep) left).getFields().forEach(s -> ldt.addColumn(s));
             //select字段
             union_fields.getLeft().forEach(s -> lsq.addColumns(ldt.findColumn(s)));
-
-            if (SqlBuilderStepType.TABLE.equals(right.getType())) {
-
-                DbTable rdt = schema.addTable(((TableStep) right).getTable_name());
-                ((TableStep) right).getFields().forEach(s -> rdt.addColumn(s));
-                union_fields.getRight().forEach(s -> rsq.addColumns(rdt.findColumn(s)));
-
-            } else {
-
-                CustomQuery csq = right.build(spec, schema);
-                union_fields.getRight().forEach(s -> rsq.addCustomColumns(new CustomSql(appendAliasPrefix(csq.getAlias(), s))));
-
-                rsq.addCustomFromTable(csq.toCustomSqlObject());
-            }
+            this.structRightJoin(spec, schema, rsq);
         }else{
 
             CustomQuery cq=left.build(spec,schema);
             union_fields.getLeft().forEach(s->lsq.addCustomColumns(new CustomSql(appendAliasPrefix(cq.getAlias(), s))));
 
             lsq.addCustomFromTable(cq.toCustomSqlObject());
-
-            if (SqlBuilderStepType.TABLE.equals(right.getType())) {
-
-                DbTable rdt = schema.addTable(((TableStep) right).getTable_name());
-                ((TableStep) right).getFields().forEach(s -> rdt.addColumn(s));
-                union_fields.getRight().forEach(s -> rsq.addColumns(rdt.findColumn(s)));
-
-            } else {
-
-                CustomQuery rcq = right.build(spec, schema);
-                union_fields.getRight().forEach(s -> rsq.addCustomColumns(new CustomSql(appendAliasPrefix(rcq.getAlias(), s))));
-
-                rsq.addCustomFromTable(rcq.toCustomSqlObject());
-            }
+            this.structRightJoin(spec, schema, rsq);
         }
         //union
         UnionQuery unionQuery = UnionQuery.union(lsq, rsq);
@@ -106,5 +80,27 @@ public class UnionStep extends AbstractStep {
                 .query(unionQuery)
                 .alias(alias)
                 .build();
+    }
+
+    /**
+     * 构造right_join
+     * @param spec
+     * @param schema
+     * @param rsq
+     */
+    private void structRightJoin(DbSpec spec, DbSchema schema, SelectQuery rsq) {
+        if (SqlbuilderStepType.TABLE.equals(right.getType())) {
+
+            DbTable rdt = schema.addTable(((TableStep) right).getTable_name());
+            ((TableStep) right).getFields().forEach(s -> rdt.addColumn(s));
+            union_fields.getRight().forEach(s -> rsq.addColumns(rdt.findColumn(s)));
+
+        } else {
+
+            CustomQuery rcq = right.build(spec, schema);
+            union_fields.getRight().forEach(s -> rsq.addCustomColumns(new CustomSql(appendAliasPrefix(rcq.getAlias(), s))));
+
+            rsq.addCustomFromTable(rcq.toCustomSqlObject());
+        }
     }
 }

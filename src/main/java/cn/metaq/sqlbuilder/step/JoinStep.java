@@ -1,8 +1,8 @@
 package cn.metaq.sqlbuilder.step;
 
-import cn.metaq.sqlbuilder.SqlBuilderStep;
-import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
-import cn.metaq.sqlbuilder.jackson.databind.SqlBuilderStepDeserializer;
+import cn.metaq.sqlbuilder.SqlbuilderStep;
+import cn.metaq.sqlbuilder.constants.SqlbuilderStepType;
+import cn.metaq.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
 import cn.metaq.sqlbuilder.model.ConditionOn;
 import cn.metaq.sqlbuilder.model.CustomQuery;
 import cn.metaq.sqlbuilder.model.JoinField;
@@ -22,7 +22,7 @@ import lombok.Setter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static cn.metaq.sqlbuilder.constants.SqlBuilderStepType.INNER_JOIN;
+import static cn.metaq.sqlbuilder.constants.SqlbuilderStepType.INNER_JOIN;
 
 /**
  * {
@@ -45,7 +45,7 @@ public class JoinStep extends AbstractStep {
     /**
      * 类型
      */
-    private SqlBuilderStepType type = INNER_JOIN;
+    private SqlbuilderStepType type = INNER_JOIN;
 
     /**
      * 关联字段
@@ -60,14 +60,14 @@ public class JoinStep extends AbstractStep {
     /**
      * 左集
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep left;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep left;
 
     /**
      * 右集
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep right;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep right;
 
     private String alias;
 
@@ -103,7 +103,7 @@ public class JoinStep extends AbstractStep {
     public CustomQuery build(DbSpec spec, DbSchema schema) {
 
         SelectQuery sq = new SelectQuery();
-        if (SqlBuilderStepType.TABLE.equals(left.getType())) {
+        if (SqlbuilderStepType.TABLE.equals(left.getType())) {
 
             TableStep leftStep = (TableStep) left;
             DbTable ldt = schema.addTable(leftStep.getTable_name());
@@ -111,7 +111,7 @@ public class JoinStep extends AbstractStep {
             //select字段
             join_fields.getLeft().forEach(s -> sq.addColumns(ldt.findColumn(s)));
 
-            if (SqlBuilderStepType.TABLE.equals(right.getType())) {
+            if (SqlbuilderStepType.TABLE.equals(right.getType())) {
 
                 TableStep rightStep = (TableStep) right;
                 DbTable rdt = schema.addTable(rightStep.getTable_name());
@@ -140,7 +140,7 @@ public class JoinStep extends AbstractStep {
             CustomQuery csq = left.build(spec, schema);
             join_fields.getLeft().forEach(s -> sq.addCustomColumns(new CustomSql(appendAliasPrefix(csq.getAlias(), s))));
 
-            if (SqlBuilderStepType.TABLE.equals(right.getType())) {
+            if (SqlbuilderStepType.TABLE.equals(right.getType())) {
 
                 DbTable rdt = schema.addTable(((TableStep) right).getTable_name());
                 ((TableStep) right).getFields().forEach(s -> rdt.addColumn(s));

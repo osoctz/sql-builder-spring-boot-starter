@@ -167,6 +167,7 @@
     "fields": ["id","name","age"]
   }
 }
+
 ```
 ```sql
 SELECT t0.age,count(1) FROM t_person1 t0 GROUP BY t0.age

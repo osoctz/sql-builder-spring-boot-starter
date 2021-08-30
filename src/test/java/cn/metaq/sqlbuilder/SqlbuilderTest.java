@@ -1,11 +1,11 @@
 package cn.metaq.sqlbuilder;
 
 import cn.metaq.sqlbuilder.step.*;
+import cn.metaq.sqlbuilder.web.SqlVisualModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthmarketscience.sqlbuilder.*;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
-import org.hamcrest.Condition;
 import org.junit.Test;
 
 import java.util.List;
@@ -228,25 +228,30 @@ public class SqlbuilderTest {
     @Test
     public void testCountStep() throws JsonProcessingException {
         String json="{\n" +
-                "  \"type\": \"COUNT\",\n" +
-                "  \"group_by_fields\": [\"age\"],\n" +
-                "  \"alias\": \"c0\",\n" +
-                "  \"source\": {\n" +
-                "    \"type\": \"TABLE\",\n" +
-                "    \"table_name\": \"t_person1\",\n" +
-                "    \"fields\": [\"id\",\"name\",\"age\"]\n" +
+                "  \"debug\": false,\n" +
+                "  \"data\": {\n" +
+                "    \"type\": \"COUNT\",\n" +
+                "    \"group_by_fields\": [\"age\"],\n" +
+                "    \"alias\": \"c0\",\n" +
+                "    \"source\": {\n" +
+                "      \"type\": \"TABLE\",\n" +
+                "      \"table_name\": \"t_person1\",\n" +
+                "      \"fields\": [\"id\",\"name\",\"age\"]\n" +
+                "    }\n" +
                 "  }\n" +
                 "}";
         ObjectMapper mapper = new ObjectMapper();
-        CountStep step=mapper.readValue(json,CountStep.class);
+        SqlVisualModel model=mapper.readValue(json, SqlVisualModel.class);
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
-        String sql=step.build(spec,schema).getQuery().validate().toString();
+        String sql=model.getData().build(spec,schema).getQuery().validate().toString();
         //System.out.println(sql);
-        step.exec(new SqlExecutor() {
+        model.getData().exec(new SqlExecutor() {
             @Override
             public List<Map<String, Object>> execute(String sql) {
+                //jdbc
+                //mybatis
                 System.out.println(sql);
                 return null;
             }

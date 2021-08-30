@@ -1,6 +1,6 @@
 package cn.metaq.sqlbuilder.step;
 
-import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
+import cn.metaq.sqlbuilder.constants.SqlbuilderStepType;
 import cn.metaq.sqlbuilder.model.CustomQuery;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
@@ -19,7 +19,7 @@ public class TableStep extends AbstractStep {
     /**
      * 类型
      */
-    private SqlBuilderStepType type = SqlBuilderStepType.TABLE;
+    private SqlbuilderStepType type = SqlbuilderStepType.TABLE;
 
     private String table_name;
 

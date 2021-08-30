@@ -1,8 +1,8 @@
 package cn.metaq.sqlbuilder.step;
 
-import cn.metaq.sqlbuilder.SqlBuilderStep;
-import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
-import cn.metaq.sqlbuilder.jackson.databind.SqlBuilderStepDeserializer;
+import cn.metaq.sqlbuilder.SqlbuilderStep;
+import cn.metaq.sqlbuilder.constants.SqlbuilderStepType;
+import cn.metaq.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
 import cn.metaq.sqlbuilder.model.ConditionOn;
 import cn.metaq.sqlbuilder.model.CustomQuery;
 import cn.metaq.sqlbuilder.model.JoinField;
@@ -16,7 +16,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-import static cn.metaq.sqlbuilder.constants.SqlBuilderStepType.INNER_JOIN;
+import static cn.metaq.sqlbuilder.constants.SqlbuilderStepType.INNER_JOIN;
 
 /**
  * {
@@ -37,7 +37,7 @@ public class ExceptStep extends AbstractStep {
     /**
      * 类型
      */
-    private SqlBuilderStepType type = SqlBuilderStepType.EXCEPT;
+    private SqlbuilderStepType type = SqlbuilderStepType.EXCEPT;
 
     /**
      * 关联字段
@@ -52,14 +52,14 @@ public class ExceptStep extends AbstractStep {
     /**
      * 左集
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep left;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep left;
 
     /**
      * 右集
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep right;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep right;
 
     private String alias;
 

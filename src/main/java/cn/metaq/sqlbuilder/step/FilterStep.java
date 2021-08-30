@@ -1,8 +1,8 @@
 package cn.metaq.sqlbuilder.step;
 
-import cn.metaq.sqlbuilder.SqlBuilderStep;
-import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
-import cn.metaq.sqlbuilder.jackson.databind.SqlBuilderStepDeserializer;
+import cn.metaq.sqlbuilder.SqlbuilderStep;
+import cn.metaq.sqlbuilder.constants.SqlbuilderStepType;
+import cn.metaq.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
 import cn.metaq.sqlbuilder.model.ConditionChain;
 import cn.metaq.sqlbuilder.model.CustomQuery;
 import cn.metaq.sqlbuilder.util.StringUtils;
@@ -32,7 +32,7 @@ public class FilterStep extends AbstractStep {
     /**
      * 类型
      */
-    private SqlBuilderStepType type = SqlBuilderStepType.FILTER;
+    private SqlbuilderStepType type = SqlbuilderStepType.FILTER;
 
     /**
      * select字段
@@ -47,8 +47,8 @@ public class FilterStep extends AbstractStep {
     /**
      * 前一个构建步骤
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep source;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep source;
 
     private String alias;
 
@@ -57,7 +57,7 @@ public class FilterStep extends AbstractStep {
 
         SelectQuery sq = new SelectQuery();
 
-        if (SqlBuilderStepType.TABLE.equals(source.getType())) {
+        if (SqlbuilderStepType.TABLE.equals(source.getType())) {
 
             String tableName = ((TableStep) source).getTable_name();
             Set<String> fields = ((TableStep) source).getFields();
@@ -107,7 +107,6 @@ public class FilterStep extends AbstractStep {
     public Condition getCondition(cn.metaq.sqlbuilder.model.Condition s, DbTable sdt) {
 
         Condition c;
-
         switch (s.getType()) {
             case LIKE:
                 c = BinaryCondition.like(sdt.findColumn(s.getName()), StringUtils.wrap((String) s.getValue(), "%", "%"));

@@ -1,6 +1,6 @@
 package cn.metaq.sqlbuilder.constants;
 
-public enum SqlBuilderStepType {
+public enum SqlbuilderStepType {
 
     TABLE,
     FILTER,
@@ -14,10 +14,10 @@ public enum SqlBuilderStepType {
     SUM,
     GROUP_CONCAT;
 
-    public static SqlBuilderStepType of(String value) {
+    public static SqlbuilderStepType of(String value) {
 
-        SqlBuilderStepType[] values = SqlBuilderStepType.values();
-        for (SqlBuilderStepType v : values) {
+        SqlbuilderStepType[] values = SqlbuilderStepType.values();
+        for (SqlbuilderStepType v : values) {
             if (v.toString().equals(value)) {
                 return v;
             }

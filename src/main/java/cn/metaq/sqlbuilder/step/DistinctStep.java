@@ -1,8 +1,8 @@
 package cn.metaq.sqlbuilder.step;
 
-import cn.metaq.sqlbuilder.SqlBuilderStep;
-import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
-import cn.metaq.sqlbuilder.jackson.databind.SqlBuilderStepDeserializer;
+import cn.metaq.sqlbuilder.SqlbuilderStep;
+import cn.metaq.sqlbuilder.constants.SqlbuilderStepType;
+import cn.metaq.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
 import cn.metaq.sqlbuilder.model.CustomQuery;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
@@ -28,7 +28,7 @@ public class DistinctStep extends AbstractStep {
     /**
      * 类型
      */
-    private SqlBuilderStepType type = SqlBuilderStepType.DISTINCT;
+    private SqlbuilderStepType type = SqlbuilderStepType.DISTINCT;
 
     /**
      * distinct字段
@@ -38,8 +38,8 @@ public class DistinctStep extends AbstractStep {
     /**
      * 前一个构建步骤
      */
-    @JsonDeserialize(using = SqlBuilderStepDeserializer.class)
-    private SqlBuilderStep source;
+    @JsonDeserialize(using = SqlbuilderStepDeserializer.class)
+    private SqlbuilderStep source;
 
     private String alias;
 
@@ -48,7 +48,7 @@ public class DistinctStep extends AbstractStep {
         SelectQuery sq = new SelectQuery();
         sq.setIsDistinct(true);
 
-        if (SqlBuilderStepType.TABLE.equals(source.getType())) {
+        if (SqlbuilderStepType.TABLE.equals(source.getType())) {
 
             DbTable sdt = schema.addTable(((TableStep) source).getTable_name());
             ((TableStep) source).getFields().forEach(s -> sdt.addColumn(s));
