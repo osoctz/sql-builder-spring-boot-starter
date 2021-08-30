@@ -1,13 +1,19 @@
 package cn.metaq.sqlbuilder.step;
 
 import cn.metaq.sqlbuilder.SqlBuilderStep;
+import cn.metaq.sqlbuilder.SqlExecutor;
 import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
 import cn.metaq.sqlbuilder.model.CustomQuery;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 
+import java.util.List;
+import java.util.Map;
+
 public class AbstractStep implements SqlBuilderStep {
+
+    protected SqlExecutor executor;
 
     @Override
     public SqlBuilderStepType getType() {
@@ -17,6 +23,11 @@ public class AbstractStep implements SqlBuilderStep {
     @Override
     public void setType(SqlBuilderStepType type) {
 
+    }
+
+    public SqlBuilderStep exec(SqlExecutor executor) {
+        this.executor = executor;
+        return this;
     }
 
     protected SelectQuery.JoinType getJoinType() {
@@ -48,5 +59,13 @@ public class AbstractStep implements SqlBuilderStep {
     @Override
     public CustomQuery build(DbSpec spec, DbSchema schema) {
         return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> preview(String sql) {
+//
+//        System.out.println("sql = " + sql);
+
+        return executor.execute(sql);
     }
 }

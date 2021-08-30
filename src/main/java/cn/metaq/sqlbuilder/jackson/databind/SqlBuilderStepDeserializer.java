@@ -1,6 +1,7 @@
 package cn.metaq.sqlbuilder.jackson.databind;
 
 import cn.metaq.sqlbuilder.SqlBuilderStep;
+import cn.metaq.sqlbuilder.constants.SqlBuilderStepType;
 import cn.metaq.sqlbuilder.step.FilterStep;
 import cn.metaq.sqlbuilder.step.TableStep;
 import com.fasterxml.jackson.core.JsonParser;
@@ -13,6 +14,8 @@ import com.jayway.jsonpath.JsonPath;
 
 
 import java.io.IOException;
+
+import static cn.metaq.sqlbuilder.constants.SqlBuilderStepType.*;
 
 public class SqlBuilderStepDeserializer extends JsonDeserializer<SqlBuilderStep> {
 
@@ -27,11 +30,11 @@ public class SqlBuilderStepDeserializer extends JsonDeserializer<SqlBuilderStep>
         String type = JsonPath.read(stepJson, "$.type");
         SqlBuilderStep step = null;
 
-        switch (type) {
-            case "TABLE":
+        switch (SqlBuilderStepType.of(type)) {
+            case TABLE:
                 step = mapper.readValue(stepJson, TableStep.class);
                 break;
-            case "FILTER":
+            case FILTER:
                 step = mapper.readValue(stepJson, FilterStep.class);
                 break;
             default:

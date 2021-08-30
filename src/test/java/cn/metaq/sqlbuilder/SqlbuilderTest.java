@@ -8,6 +8,9 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 import org.hamcrest.Condition;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.Map;
+
 public class SqlbuilderTest {
 
     @Test
@@ -239,7 +242,15 @@ public class SqlbuilderTest {
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
-        System.out.println(step.build(spec,schema).getQuery().validate());
+        String sql=step.build(spec,schema).getQuery().validate().toString();
+        //System.out.println(sql);
+        step.exec(new SqlExecutor() {
+            @Override
+            public List<Map<String, Object>> execute(String sql) {
+                System.out.println(sql);
+                return null;
+            }
+        }).preview(sql);
     }
 
     @Test

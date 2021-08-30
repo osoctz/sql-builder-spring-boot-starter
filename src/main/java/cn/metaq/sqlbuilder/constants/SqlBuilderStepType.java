@@ -13,4 +13,16 @@ public enum SqlBuilderStepType {
     COUNT,
     SUM,
     GROUP_CONCAT;
+
+    public static SqlBuilderStepType of(String value) {
+
+        SqlBuilderStepType[] values = SqlBuilderStepType.values();
+        for (SqlBuilderStepType v : values) {
+            if (v.toString().equals(value)) {
+                return v;
+            }
+        }
+
+        return null;
+    }
 }
