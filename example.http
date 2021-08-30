@@ -1,0 +1,17 @@
+POST http://localhost:8080/sqlbuilder
+Content-Type: application/json
+
+{
+  "isDebug": false,
+  "data": {
+    "type": "COUNT",
+    "group_by_fields": ["age"],
+    "alias": "c0",
+    "source": {
+      "type": "TABLE",
+      "table_name": "t_person1",
+      "fields": ["id","name","age"]
+    }
+  }
+}
+###
