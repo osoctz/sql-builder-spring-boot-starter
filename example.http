@@ -1,17 +1,120 @@
-POST http://localhost:8080/sqlbuilder
+POST http://localhost:8080/preview
 Content-Type: application/json
 
 {
   "isDebug": false,
   "data": {
-    "type": "COUNT",
-    "group_by_fields": ["age"],
-    "alias": "c0",
-    "source": {
-      "type": "TABLE",
-      "table_name": "t_person1",
-      "fields": ["id","name","age"]
-    }
+    "type": "LEFT_JOIN",
+    "join_fields": {
+      "left": ["id","name"],
+      "right": ["age"]
+    },
+    "on": [
+      {
+        "left": "name",
+        "right": "name"
+      }
+    ],
+    "left": {
+      "type": "FILTER",
+      "select_fields": ["id","name","age"],
+      "source": {
+        "type": "TABLE",
+        "table_name": "t_person2",
+        "fields": ["id","name","age"]
+      },
+      "condition": {
+        "conditions": [
+          {
+            "type": "GT",
+            "name": "age",
+            "value": 5
+          }
+        ]
+      },
+      "alias": "v2"
+    },
+    "right": {
+      "type": "FILTER",
+      "select_fields": ["id","name","age"],
+      "source": {
+        "type": "TABLE",
+        "table_name": "t_person1",
+        "fields": ["id","name","age"]
+      },
+      "condition": {
+        "conditions": [
+          {
+            "type": "GT",
+            "name": "age",
+            "value": 10
+          }
+        ]
+      },
+      "alias": "v1"
+    },
+    "alias": "v3"
   }
 }
+###
+
+POST http://localhost:8080/model/exec
+Content-Type: application/json
+
+{
+  "isDebug": false,
+  "data": {
+    "type": "LEFT_JOIN",
+    "join_fields": {
+      "left": ["id","name"],
+      "right": ["age"]
+    },
+    "on": [
+      {
+        "left": "name",
+        "right": "name"
+      }
+    ],
+    "left": {
+      "type": "FILTER",
+      "select_fields": ["id","name","age"],
+      "source": {
+        "type": "TABLE",
+        "table_name": "t_person2",
+        "fields": ["id","name","age"]
+      },
+      "condition": {
+        "conditions": [
+          {
+            "type": "GT",
+            "name": "age",
+            "value": 5
+          }
+        ]
+      },
+      "alias": "v2"
+    },
+    "right": {
+      "type": "FILTER",
+      "select_fields": ["id","name","age"],
+      "source": {
+        "type": "TABLE",
+        "table_name": "t_person1",
+        "fields": ["id","name","age"]
+      },
+      "condition": {
+        "conditions": [
+          {
+            "type": "GT",
+            "name": "age",
+            "value": 10
+          }
+        ]
+      },
+      "alias": "v1"
+    },
+    "alias": "v3"
+  }
+}
+
 ###
