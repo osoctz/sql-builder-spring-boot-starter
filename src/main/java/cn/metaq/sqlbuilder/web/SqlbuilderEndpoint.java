@@ -49,8 +49,11 @@ public class SqlbuilderEndpoint {
         DbSchema schema = spec.addDefaultSchema();
         String sql = model.getData().build(spec, schema).getQuery().validate().toString();
 
+        long start = System.currentTimeMillis();
         List<Map<String, Object>> data = executor.execute(sql);
+        long end = System.currentTimeMillis();
 
+        System.out.println("查询花费时间 :" + (end-start)/1000 +"s");
         SqlbuilderRecord record = new SqlbuilderRecord();
         record.setViewSql(sql);
         record.setCreateTs(DateUtils.getCurrent());

@@ -391,4 +391,5 @@ public class SqlbuilderTest {
         DbSchema schema = spec.addDefaultSchema();
         System.out.println(step.build(spec,schema).getQuery().validate());
     }
+
 }

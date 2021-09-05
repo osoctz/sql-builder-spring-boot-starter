@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SqlbuilderRecordServiceImpl extends BaseBiz<SqlbuilderRecord, String, SqlbuilderRecordDao> implements SqlbuilderRecordService {
@@ -21,6 +22,10 @@ public class SqlbuilderRecordServiceImpl extends BaseBiz<SqlbuilderRecord, Strin
     public void save(SqlbuilderRecord object, List<Map<String, Object>> data) {
 
         super.save(object);
+        long start = System.currentTimeMillis();
         mongoTemplate.insert(data,object.getResultView());
+        long end=System.currentTimeMillis();
+
+        System.out.println("time = " + (end-start)/1000+"s");
     }
 }

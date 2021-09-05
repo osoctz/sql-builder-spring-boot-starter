@@ -356,4 +356,24 @@ WHERE NOT EXISTS (
 ```
 
 
+## 测试
+```sql
+环境
+mysql8
+mongo 5.0.1
+
+测试机 macos m1 16g
+```
+```text
+# 30w
+查询花费时间 :0s
+time = 4s
+
+
+# 300w
+查询花费时间 :18s
+time = 45s
+```
+
+
 
