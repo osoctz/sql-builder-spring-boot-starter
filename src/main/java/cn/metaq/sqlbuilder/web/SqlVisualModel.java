@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.web;
 
-import cn.metaq.sqlbuilder.SqlbuilderStep;
-import cn.metaq.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
+import cn.metaq.std.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
+import cn.metaq.std.sqlbuilder.step.SqlbuilderStep;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
