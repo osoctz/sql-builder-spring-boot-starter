@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>cn.metaq</groupId>
-            <artifactId>metaq-std-sqlbuilder</artifactId>
+            <artifactId>metaq-component-sqlbuilder</artifactId>
         </dependency>
 
         <dependency>

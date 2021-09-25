@@ -1,16 +1,28 @@
 package cn.metaq.sqlbuilder;
 
-import cn.metaq.std.sqlbuilder.service.SqlExecutor;
-import cn.metaq.std.sqlbuilder.step.*;
 import cn.metaq.sqlbuilder.web.SqlVisualModel;
+import cn.metaq.std.sqlbuilder.service.SqlExecutor;
+import cn.metaq.std.sqlbuilder.step.DiffStep;
+import cn.metaq.std.sqlbuilder.step.DistinctStep;
+import cn.metaq.std.sqlbuilder.step.FilterStep;
+import cn.metaq.std.sqlbuilder.step.JoinStep;
+import cn.metaq.std.sqlbuilder.step.mysql.ConcatStep;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.healthmarketscience.sqlbuilder.*;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
-import org.junit.Test;
-
+import com.healthmarketscience.sqlbuilder.BinaryCondition;
+import com.healthmarketscience.sqlbuilder.Conditions;
+import com.healthmarketscience.sqlbuilder.Converter;
+import com.healthmarketscience.sqlbuilder.CustomSql;
+import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.Subquery;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import java.util.List;
 import java.util.Map;
+import org.junit.Test;
 
 public class SqlbuilderTest {
 
@@ -158,8 +170,7 @@ public class SqlbuilderTest {
         JoinStep joinStep=mapper.readValue(json, JoinStep.class);
 
         DbSpec spec = new DbSpec();
-        DbSchema schema = spec.addDefaultSchema();
-        System.out.println(joinStep.build(spec,schema).getQuery().validate());
+        System.out.println(joinStep.build(spec).getQuery().validate());
     }
 
     @Test
@@ -222,8 +233,8 @@ public class SqlbuilderTest {
         JoinStep joinStep=mapper.readValue(json, JoinStep.class);
 
         DbSpec spec = new DbSpec();
-        DbSchema schema = spec.addDefaultSchema();
-        System.out.println(joinStep.build(spec,schema).getQuery().validate());
+        DbSchema schema = spec.addSchema("tlf");
+        System.out.println(joinStep.build(spec).getQuery().validate());
     }
 
     @Test
@@ -245,10 +256,10 @@ public class SqlbuilderTest {
         SqlVisualModel model=mapper.readValue(json, SqlVisualModel.class);
 
         DbSpec spec = new DbSpec();
-        DbSchema schema = spec.addDefaultSchema();
-        String sql=model.getData().build(spec,schema).getQuery().validate().toString();
+        DbSchema schema = spec.addSchema("tlf");
+        String sql=model.getDetails().build(spec).getQuery().validate().toString();
         //System.out.println(sql);
-        model.getData().exec(new SqlExecutor() {
+        model.getDetails().executor(new SqlExecutor() {
             @Override
             public List<Map<String, Object>> execute(String sql) {
                 //jdbc
@@ -276,7 +287,7 @@ public class SqlbuilderTest {
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
-        System.out.println(step.build(spec,schema).getQuery().validate());
+        System.out.println(step.build(spec).getQuery().validate());
     }
 
     @Test
@@ -287,6 +298,7 @@ public class SqlbuilderTest {
                 "  \"alias\": \"f0\",\n" +
                 "  \"source\": {\n" +
                 "    \"type\": \"TABLE\",\n" +
+
                 "    \"table_name\": \"t_person1\",\n" +
                 "    \"fields\": [\"id\",\"name\",\"age\"]\n" +
                 "  },\n" +
@@ -307,13 +319,14 @@ public class SqlbuilderTest {
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
-        System.out.println(step.build(spec,schema).getQuery().validate());
+        System.out.println(step.build(spec).getQuery().validate());
     }
 
     @Test
     public void testGroupConcatStep() throws JsonProcessingException {
         String json="{\n" +
                 "  \"type\": \"GROUP_CONCAT\",\n" +
+                "  \"dialect\": \"MYSQL\",\n" +
                 "  \"group_by_fields\": [\"age\"],\n" +
                 "  \"group_concat_fields\": [\"name\"],\n" +
                 "  \"alias\": \"g0\",\n" +
@@ -325,11 +338,10 @@ public class SqlbuilderTest {
                 "}";
 
         ObjectMapper mapper = new ObjectMapper();
-        GroupConcatStep step=mapper.readValue(json,GroupConcatStep.class);
+        ConcatStep step=mapper.readValue(json,ConcatStep.class);
 
         DbSpec spec = new DbSpec();
-        DbSchema schema = spec.addDefaultSchema();
-        System.out.println(step.build(spec,schema).getQuery().validate());
+        System.out.println(step.build(spec).getQuery().validate());
     }
 
     /**
@@ -385,11 +397,11 @@ public class SqlbuilderTest {
                 "  \"alias\": \"e0\"\n" +
                 "}";
         ObjectMapper mapper = new ObjectMapper();
-        ExceptStep step=mapper.readValue(json,ExceptStep.class);
+        DiffStep step=mapper.readValue(json,DiffStep.class);
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
-        System.out.println(step.build(spec,schema).getQuery().validate());
+        System.out.println(step.build(spec).getQuery().validate());
     }
 
 }
