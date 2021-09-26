@@ -5,6 +5,7 @@
 ```json5
 {
   "debug": false,
+  "name": "统计",
   "details": {
     "type": "COUNT",
     "group_by_fields": [
@@ -33,6 +34,7 @@ SELECT t0.age,count(1) FROM t_person1 t0 GROUP BY t0.age
 ```json5
 {
   "debug": false,
+  "name": "去重",
   "details": {
     "type":"DISTINCT",
     "distinct_fields": ["age"],
@@ -54,6 +56,7 @@ SELECT DISTINCT t0.age FROM t_person1 t0
 ```json5
 {
   "debug": false,
+  "name": "过滤",
   "details": {
     "type": "FILTER",
     "select_fields": [
@@ -95,6 +98,7 @@ SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 
 ```json5
 {
   "debug": false,
+  "name": "合并列值",
   "details": {
     "type": "GROUP_CONCAT",
     "group_by_fields": [
@@ -125,6 +129,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
 ```json5
 {
   "debug": false,
+  "name": "关联",
   "details": {
     "type": "LEFT_JOIN",
     "join_fields": {
@@ -233,6 +238,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
 ```json5
 {
   "debug": false,
+  "name": "差集",
   "details": {
     "type": "DIFF",
     "union_fields": {
@@ -283,6 +289,7 @@ WHERE NOT EXISTS (
 ```json5
 {
   "debug": false,
+  "name": "分页",
   "details": {
     "type": "PAGE",
     "dialect": "MYSQL",
