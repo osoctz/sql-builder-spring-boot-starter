@@ -4,13 +4,22 @@
 ## 统计示例
 ```json5
 {
-  "type": "COUNT",
-  "group_by_fields": ["age"],
-  "alias": "c0",
-  "source": {
-    "type": "TABLE",
-    "table_name": "t_person1",
-    "fields": ["id","name","age"]
+  "debug": false,
+  "details": {
+    "type": "COUNT",
+    "group_by_fields": [
+      "age"
+    ],
+    "alias": "c0",
+    "source": {
+      "type": "TABLE",
+      "table_name": "t_person1",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    }
   }
 }
 
@@ -85,14 +94,25 @@ SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 
 ## 合并列值
 ```json5
 {
-  "type": "GROUP_CONCAT",
-  "group_by_fields": ["age"],
-  "group_concat_fields": ["name"],
-  "alias": "g0",
-  "source": {
-    "type": "TABLE",
-    "table_name": "t_person1",
-    "fields": ["id","name","age"]
+  "debug": false,
+  "details": {
+    "type": "GROUP_CONCAT",
+    "group_by_fields": [
+      "age"
+    ],
+    "group_concat_fields": [
+      "name"
+    ],
+    "alias": "g0",
+    "source": {
+      "type": "TABLE",
+      "table_name": "t_person1",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    }
   }
 }
 ```
@@ -104,58 +124,81 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
 ## 关联示例
 ```json5
 {
-  "type": "LEFT_JOIN",
-  "join_fields": {
-    "left": ["id","name"],
-    "right": ["age"]
-  },
-  "on": [
-    {
-      "left": "name",
-      "right": "name"
-    }
-  ],
-  "left": {
-    "type": "FILTER",
-    "select_fields": ["id","name","age"],
-    "source": {
-      "type": "TABLE",
-      "table_name": "t_person2",
-      "fields": ["id","name","age"]
-    },
-    "condition": {
-      "conditions": [
-        {
-          "type": "GT",
-          "name": "age",
-          "value": 5
-        }
+  "debug": false,
+  "details": {
+    "type": "LEFT_JOIN",
+    "join_fields": {
+      "left": [
+        "id",
+        "name"
+      ],
+      "right": [
+        "age"
       ]
     },
-    "alias": "v2"
-  },
-  "right": {
-    "type": "FILTER",
-    "select_fields": ["id","name","age"],
-    "source": {
-      "type": "TABLE",
-      "table_name": "t_person1",
-      "fields": ["id","name","age"]
+    "on": [
+      {
+        "left": "name",
+        "right": "name"
+      }
+    ],
+    "left": {
+      "type": "FILTER",
+      "select_fields": [
+        "id",
+        "name",
+        "age"
+      ],
+      "source": {
+        "type": "TABLE",
+        "table_name": "t_person2",
+        "fields": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "condition": {
+        "conditions": [
+          {
+            "type": "GT",
+            "name": "age",
+            "value": 5
+          }
+        ]
+      },
+      "alias": "v2"
     },
-    "condition": {
-      "conditions": [
-        {
-          "type": "GT",
-          "name": "age",
-          "value": 10
-        }
-      ]
+    "right": {
+      "type": "FILTER",
+      "select_fields": [
+        "id",
+        "name",
+        "age"
+      ],
+      "source": {
+        "type": "TABLE",
+        "table_name": "t_person1",
+        "fields": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "condition": {
+        "conditions": [
+          {
+            "type": "GT",
+            "name": "age",
+            "value": 10
+          }
+        ]
+      },
+      "alias": "v1"
     },
-    "alias": "v1"
-  },
-  "alias": "v3"
+    "alias": "v3"
+  }
 }
-
 ```
 ```sql
     SELECT 
@@ -189,6 +232,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
 ## 差集示例
 ```json5
 {
+  "debug": false,
   "details": {
     "type": "DIFF",
     "union_fields": {
@@ -238,6 +282,7 @@ WHERE NOT EXISTS (
 ## 分页
 ```json5
 {
+  "debug": false,
   "details": {
     "type": "PAGE",
     "dialect": "MYSQL",
