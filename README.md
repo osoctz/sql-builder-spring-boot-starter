@@ -406,5 +406,10 @@ time = 4s
 time = 45s
 ```
 
+## swagger-ui
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
 
 
