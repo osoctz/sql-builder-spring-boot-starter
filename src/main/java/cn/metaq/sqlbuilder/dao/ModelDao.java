@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.dao;
 
 import cn.metaq.data.jpa.BaseDao;
-import cn.metaq.sqlbuilder.model.SqlbuilderModel;
+import cn.metaq.sqlbuilder.model.Model;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  * @author zantang
  */
 @Repository
-public interface SqlbuilderModelDao extends BaseDao<SqlbuilderModel, Long> {
+public interface ModelDao extends BaseDao<Model, Long> {
 
 }

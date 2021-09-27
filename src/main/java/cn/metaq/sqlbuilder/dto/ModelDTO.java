@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 @Setter
 @Getter
-public class SqlbuilderModelDTO {
+public class ModelDTO {
 
   /**
    * 是否调试模式

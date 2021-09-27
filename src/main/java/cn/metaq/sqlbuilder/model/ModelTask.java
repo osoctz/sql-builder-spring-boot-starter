@@ -16,15 +16,15 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 战法模型定义
  *
+ * 模型运行任务定义表
  * @author zantang
  */
-@Table(name = "t_def_model")
+@Table(name = "t_def_model_task")
 @Entity
 @Setter
 @Getter
-public class SqlbuilderModel implements IEntity<Long> {
+public class ModelTask implements IEntity<Long> {
 
   @Id
   @GeneratedValue(generator = "snowflakeId")
@@ -32,8 +32,9 @@ public class SqlbuilderModel implements IEntity<Long> {
   private Long id;
 
   private String name;
-
-  private String definition;
+  private String build;
+  private String improvement;
+  private Integer type;
 
   @Column(name = "created_by")
   private String createdBy;

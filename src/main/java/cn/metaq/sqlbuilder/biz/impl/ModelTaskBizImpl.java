@@ -1,11 +1,11 @@
 package cn.metaq.sqlbuilder.biz.impl;
 
 import cn.metaq.data.jpa.BaseBiz;
-import cn.metaq.sqlbuilder.biz.SqlbuilderModelTaskBiz;
-import cn.metaq.sqlbuilder.dao.SqlbuilderModelTaskDao;
-import cn.metaq.sqlbuilder.dao.SqlbuilderModelTaskRecordDao;
-import cn.metaq.sqlbuilder.model.SqlbuilderModelTask;
-import cn.metaq.sqlbuilder.model.SqlbuilderModelTaskRecord;
+import cn.metaq.sqlbuilder.biz.ModelTaskBiz;
+import cn.metaq.sqlbuilder.dao.ModelTaskDao;
+import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
+import cn.metaq.sqlbuilder.model.ModelTask;
+import cn.metaq.sqlbuilder.model.ModelTaskRecord;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
 import javax.annotation.Resource;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,9 +13,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SqlbuilderModelTaskBizImpl extends
-    BaseBiz<SqlbuilderModelTask, Long, SqlbuilderModelTaskDao> implements
-    SqlbuilderModelTaskBiz {
+public class ModelTaskBizImpl extends
+    BaseBiz<ModelTask, Long, ModelTaskDao> implements
+    ModelTaskBiz {
 
   private static final String VIEW_PREFIX = "record_";
 
@@ -24,14 +24,14 @@ public class SqlbuilderModelTaskBizImpl extends
   @Resource
   private MongoTemplate mongoTemplate;
   @Resource
-  private SqlbuilderModelTaskRecordDao recordDao;
+  private ModelTaskRecordDao recordDao;
 
   @Override
-  public SqlbuilderModelTaskRecord execute(SqlbuilderModelTask task) {
+  public ModelTaskRecord execute(ModelTask task) {
 
     task= dao.save(task);
 
-    SqlbuilderModelTaskRecord record = new SqlbuilderModelTaskRecord();
+    ModelTaskRecord record = new ModelTaskRecord();
     record.setTid(task.getId());
     record.setExecute(task.getImprovement());
 
@@ -43,7 +43,7 @@ public class SqlbuilderModelTaskBizImpl extends
   }
 
   @Override
-  public Specification map(SqlbuilderModelTask sqlbuilderModelTask) {
+  public Specification map(ModelTask modelTask) {
     return null;
   }
 }

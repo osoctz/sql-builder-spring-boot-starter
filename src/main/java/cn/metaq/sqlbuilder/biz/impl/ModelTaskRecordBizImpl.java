@@ -1,10 +1,10 @@
 package cn.metaq.sqlbuilder.biz.impl;
 
 import cn.metaq.data.jpa.BaseBiz;
-import cn.metaq.sqlbuilder.biz.SqlbuilderModelTaskRecordBiz;
-import cn.metaq.sqlbuilder.dao.SqlbuilderModelTaskRecordDao;
-import cn.metaq.sqlbuilder.model.SqlbuilderModelTask;
-import cn.metaq.sqlbuilder.model.SqlbuilderModelTaskRecord;
+import cn.metaq.sqlbuilder.biz.TaskRecordBiz;
+import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
+import cn.metaq.sqlbuilder.model.ModelTask;
+import cn.metaq.sqlbuilder.model.ModelTaskRecord;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +15,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SqlbuilderModelTaskRecordBizImpl extends
-    BaseBiz<SqlbuilderModelTaskRecord, Long, SqlbuilderModelTaskRecordDao> implements
-    SqlbuilderModelTaskRecordBiz {
+public class ModelTaskRecordBizImpl extends
+    BaseBiz<ModelTaskRecord, Long, ModelTaskRecordDao> implements
+    TaskRecordBiz {
 
   private static final String VIEW_PREFIX = "record_";
 
@@ -29,11 +29,11 @@ public class SqlbuilderModelTaskRecordBizImpl extends
 
   @Transactional
   @Override
-  public SqlbuilderModelTaskRecord execute(SqlbuilderModelTask task) {
+  public ModelTaskRecord execute(ModelTask task) {
 
     List<Map<String, Object>> data = executor.execute(task.getImprovement());
 
-    SqlbuilderModelTaskRecord record = new SqlbuilderModelTaskRecord();
+    ModelTaskRecord record = new ModelTaskRecord();
     record.setTid(task.getId());
     record.setExecute(task.getImprovement());
 
@@ -46,7 +46,7 @@ public class SqlbuilderModelTaskRecordBizImpl extends
   }
 
   @Override
-  public Specification map(SqlbuilderModelTaskRecord sqlbuilderModelTaskRecord) {
+  public Specification map(ModelTaskRecord modelTaskRecord) {
     return null;
   }
 }

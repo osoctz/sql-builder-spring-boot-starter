@@ -1,6 +1,6 @@
 package cn.metaq.sqlbuilder;
 
-import cn.metaq.sqlbuilder.dto.SqlbuilderModelDTO;
+import cn.metaq.sqlbuilder.dto.ModelDTO;
 import cn.metaq.std.sqlbuilder.service.SqlExecutor;
 import cn.metaq.std.sqlbuilder.step.DiffStep;
 import cn.metaq.std.sqlbuilder.step.DistinctStep;
@@ -253,7 +253,7 @@ public class SqlbuilderTest {
                 "  }\n" +
                 "}";
         ObjectMapper mapper = new ObjectMapper();
-        SqlbuilderModelDTO model=mapper.readValue(json, SqlbuilderModelDTO.class);
+        ModelDTO model=mapper.readValue(json, ModelDTO.class);
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addSchema("tlf");

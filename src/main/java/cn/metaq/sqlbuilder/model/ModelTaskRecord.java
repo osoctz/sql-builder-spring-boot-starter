@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Setter
 @Getter
-public class SqlbuilderModelTaskRecord implements IEntity<Long> {
+public class ModelTaskRecord implements IEntity<Long> {
 
   @Id
   @GeneratedValue(generator = "snowflakeId")
