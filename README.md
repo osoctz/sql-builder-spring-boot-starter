@@ -1,3 +1,17 @@
+## 表可选字段说明
+```json5
+{
+  "type": "TABLE",
+  "name": "t_person1",
+  "dialect": "MYSQL",  //当有方言区别时需要设置，比如mysql分页时limit，oracle是rownum
+  "schema": "test_srv", //当sql执行当表不在当前db时需要设置
+  "fields": [
+    "id",
+    "name",
+    "age"
+  ]
+}
+```
 ## 综合示例
 ![](WX20210818-152324@2x.png)
 
@@ -14,7 +28,8 @@
     "alias": "c0",
     "source": {
       "type": "TABLE",
-      "table_name": "t_person1",
+      "name": "t_person1",
+      "schema": "test_srv",
       "fields": [
         "id",
         "name",
@@ -40,7 +55,7 @@ SELECT t0.age,count(1) FROM t_person1 t0 GROUP BY t0.age
     "distinct_fields": ["age"],
     "source": {
       "type": "TABLE",
-      "table_name": "t_person1",
+      "name": "t_person1",
       "fields": ["id","name","age"]
     },
     "alias": "d0"
@@ -75,7 +90,7 @@ SELECT DISTINCT t0.age FROM t_person1 t0
     },
     "source": {
       "type": "TABLE",
-      "table_name": "t_person2",
+      "name": "t_person2",
       "fields": [
         "id",
         "name",
@@ -110,7 +125,7 @@ SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 
     "alias": "g0",
     "source": {
       "type": "TABLE",
-      "table_name": "t_person1",
+      "name": "t_person1",
       "fields": [
         "id",
         "name",
@@ -156,14 +171,14 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
       ],
       "source": {
         "type": "TABLE",
-        "table_name": "t_person2",
+        "name": "t_person2",
         "fields": [
           "id",
           "name",
           "age"
         ]
       },
-      "condition": {
+      "chain": {
         "conditions": [
           {
             "type": "GT",
@@ -183,14 +198,14 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
       ],
       "source": {
         "type": "TABLE",
-        "table_name": "t_person1",
+        "name": "t_person1",
         "fields": [
           "id",
           "name",
           "age"
         ]
       },
-      "condition": {
+      "chain": {
         "conditions": [
           {
             "type": "GT",
@@ -253,12 +268,12 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     ],
     "left": {
       "type": "TABLE",
-      "table_name": "t_person1",
+      "name": "t_person1",
       "fields": ["id","name","age"]
     },
     "right": {
       "type": "TABLE",
-      "table_name": "t_person2",
+      "name": "t_person2",
       "fields": ["id","name","age"]
     },
     "alias": "e0"
@@ -298,7 +313,8 @@ WHERE NOT EXISTS (
     "alias": "p0",
     "source": {
       "type": "TABLE",
-      "table_name": "t_person1",
+      "name": "t_person1",
+      "schema": "test_srv",
       "fields": [
         "id",
         "name",
