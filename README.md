@@ -334,6 +334,30 @@ WHERE NOT EXISTS (
 ```sql
 SELECT t0.name,t0.id,t0.age FROM t_person1 t0 ORDER BY t0.id DESC LIMIT 20, 10
 ```
+
+## 排序
+```json5
+{
+  "type": "ORDER",
+  "order_fields":[
+    {
+      "name": "age",
+      "type": "DESC|ASC"
+    }
+  ],
+  "source": {
+    "type": "TABLE",
+    "name": "t_person1",
+    "schema": "test_srv",
+    "fields": [
+      "id",
+      "name",
+      "age"
+    ]
+  }
+  "alias": "o0"
+}
+```
 ## 测试
 ```sql
 环境
