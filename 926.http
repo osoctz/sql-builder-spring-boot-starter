@@ -42,24 +42,19 @@ POST http://localhost:8080/models
 Content-Type: application/json
 
 {
-  "name": "过滤",
+  "debug": false,
+  "name": "交集",
   "details": {
-    "type": "FILTER",
-    "selectFields": [
-      "id",
-      "name",
-      "age"
-    ],
-    "chain": {
-      "conditions": [
-        {
-          "type": "GT",
-          "name": "age",
-          "value": 10
-        }
+    "type": "SAME",
+    "unionFields": {
+      "left": [
+        "name"
+      ],
+      "right": [
+        "name"
       ]
     },
-    "source": {
+    "left": {
       "type": "TABLE",
       "name": "t_person2",
       "schema": "test_srv",
@@ -69,12 +64,22 @@ Content-Type: application/json
         "age"
       ]
     },
-    "alias": "f0"
+    "right": {
+      "type": "TABLE",
+      "name": "t_person1",
+      "schema": "test_srv",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    },
+    "alias": "v3"
   }
 }
 
 ### 运行模型
-GET http://localhost:8080/models/602402376222154752
+GET http://localhost:8080/models/602500042847412224
 Content-Type: application/json
 
 

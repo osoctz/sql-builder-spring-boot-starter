@@ -220,6 +220,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
   }
 }
 ```
+
 ```sql
     SELECT 
            v2.id,v2.name,v1.age 
@@ -233,22 +234,50 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
                    WHERE (t1.age > 10)) AS v1 
     ON (v2.name = v1.name)
 
-
-
-    SELECT 
-           v2.id,v2.name,v1.age 
-    FROM (SELECT 
-               _l0.id,_l0.name,_l0.age 
-          FROM (SELECT 
-                     t0.name,t0.id,t0.age 
-                FROM t_person2 t0 LIMIT 0, 10) AS _l0 
-                WHERE (_l0.age > 5)) AS v2 
-    LEFT OUTER JOIN (SELECT 
-                            t1.id,t1.name,t1.age 
-                     FROM t_person1 t1 
-                     WHERE (t1.age > 10)) AS v1 
-    ON (v2.name = v1.name)
 ```
+## 交集
+```json5
+{
+  "debug": false,
+  "name": "交集",
+  "details": {
+    "type": "SAME",
+    "union_fields": {
+      "left": [
+        "name"
+      ],
+      "right": [
+        "name"
+      ]
+    },
+    "left": {
+      "type": "TABLE",
+      "name": "t_person2",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    },
+    "right": {
+      "type": "TABLE",
+      "name": "t_person1",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    },
+    "alias": "v3"
+  }
+}
+```
+
+```sql
+    SELECT t0.name FROM test_srv.t_person2 t0 INNER JOIN test_srv.t_person1 t1 ON (t0.name = t1.name)
+
+```
+
 ## 差集示例
 ```json5
 {
