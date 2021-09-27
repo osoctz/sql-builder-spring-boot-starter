@@ -45,7 +45,7 @@ Content-Type: application/json
   "name": "过滤",
   "details": {
     "type": "FILTER",
-    "select_fields": [
+    "selectFields": [
       "id",
       "name",
       "age"
@@ -61,7 +61,7 @@ Content-Type: application/json
     },
     "source": {
       "type": "TABLE",
-      "table_name": "t_person2",
+      "name": "t_person2",
       "schema": "test_srv",
       "fields": [
         "id",
@@ -74,7 +74,7 @@ Content-Type: application/json
 }
 
 ### 运行模型
-GET http://localhost:8080/models/602061285677506560
+GET http://localhost:8080/models/602402376222154752
 Content-Type: application/json
 
 

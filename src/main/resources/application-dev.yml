@@ -1,0 +1,15 @@
+spring:
+  #profiles: dev
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/model_srv?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&rewriteBatchedStatements=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
+
+logging:
+  level:
+    cn:
+      metaq: debug
