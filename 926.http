@@ -73,6 +73,11 @@ Content-Type: application/json
   }
 }
 
+### 运行模型
+GET http://localhost:8080/models/602061285677506560
+Content-Type: application/json
+
+
 ### 定义任务
 POST http://localhost:8080/602061285677506560/tasks
 Content-Type: application/json

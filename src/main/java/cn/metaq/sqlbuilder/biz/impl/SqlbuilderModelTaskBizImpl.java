@@ -7,8 +7,6 @@ import cn.metaq.sqlbuilder.dao.SqlbuilderModelTaskRecordDao;
 import cn.metaq.sqlbuilder.model.SqlbuilderModelTask;
 import cn.metaq.sqlbuilder.model.SqlbuilderModelTaskRecord;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.Resource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,6 +17,30 @@ public class SqlbuilderModelTaskBizImpl extends
     BaseBiz<SqlbuilderModelTask, Long, SqlbuilderModelTaskDao> implements
     SqlbuilderModelTaskBiz {
 
+  private static final String VIEW_PREFIX = "record_";
+
+  @Resource
+  private JdbcSqlExecutor executor;
+  @Resource
+  private MongoTemplate mongoTemplate;
+  @Resource
+  private SqlbuilderModelTaskRecordDao recordDao;
+
+  @Override
+  public SqlbuilderModelTaskRecord execute(SqlbuilderModelTask task) {
+
+    task= dao.save(task);
+
+    SqlbuilderModelTaskRecord record = new SqlbuilderModelTaskRecord();
+    record.setTid(task.getId());
+    record.setExecute(task.getImprovement());
+
+    recordDao.save(record);
+
+    record.setCollection(VIEW_PREFIX + record.getId());
+    mongoTemplate.insert(executor.execute(task.getImprovement()), record.getCollection());
+    return record;
+  }
 
   @Override
   public Specification map(SqlbuilderModelTask sqlbuilderModelTask) {
