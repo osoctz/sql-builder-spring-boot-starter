@@ -1,9 +1,19 @@
 package cn.metaq.sqlbuilder.model;
 
 import cn.metaq.common.core.IEntity;
-import javax.persistence.*;
+import cn.metaq.sqlbuilder.util.UserContextUtils;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * <p>Date: Mon Sep 27 13:22:15 CST 2021.</p>
@@ -20,8 +30,8 @@ public class ModelTemplate implements IEntity<Long>{
 	private static final long serialVersionUID =  2089944332976494288L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id" )
+	@GeneratedValue(generator = "snowflakeId")
+	@GenericGenerator(name = "snowflakeId", strategy = "cn.metaq.data.jpa.id.SnowflakeIdGenerator")
 	private Long id;
 
 	/**
@@ -55,4 +65,9 @@ public class ModelTemplate implements IEntity<Long>{
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date createdTs;
 
+	@PrePersist
+	public void preCreate() {
+		this.setCreatedBy(UserContextUtils.getUser());
+		this.setCreatedTs(new Date());
+	}
 }

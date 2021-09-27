@@ -78,6 +78,14 @@ Content-Type: application/json
   }
 }
 
+### 设置为模版
+GET http://localhost:8080/602500042847412224/templates
+Content-Type: application/json
+
+###
+GET http://localhost:8080/modelTemplate/602506206024818688
+Content-Type: application/json
+
 ### 运行模型
 GET http://localhost:8080/models/602500042847412224
 Content-Type: application/json

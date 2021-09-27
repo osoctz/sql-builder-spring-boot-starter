@@ -1,6 +1,7 @@
 package cn.metaq.sqlbuilder.model;
 
 import cn.metaq.common.core.IEntity;
+import cn.metaq.sqlbuilder.util.UserContextUtils;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,13 +52,13 @@ public class Model implements IEntity<Long> {
 
   @PrePersist
   public void preCreate() {
-    this.setCreatedBy("test");
+    this.setCreatedBy(UserContextUtils.getUser());
     this.setCreatedTs(new Date());
   }
 
   @PreUpdate
   public void preUpdate() {
-    this.setUpdatedBy("test");
+    this.setUpdatedBy(UserContextUtils.getUser());
     this.setUpdateTs(new Date());
   }
 }

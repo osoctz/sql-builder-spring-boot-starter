@@ -5,11 +5,14 @@ import cn.metaq.common.web.BaseController;
 import cn.metaq.common.web.dto.Result;
 import cn.metaq.sqlbuilder.biz.ModelBiz;
 import cn.metaq.sqlbuilder.biz.ModelTaskBiz;
+import cn.metaq.sqlbuilder.biz.ModelTemplateBiz;
 import cn.metaq.sqlbuilder.dto.ModelDTO;
 import cn.metaq.sqlbuilder.model.Model;
 import cn.metaq.sqlbuilder.model.ModelTask;
+import cn.metaq.sqlbuilder.model.ModelTemplate;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -33,6 +36,8 @@ public class ModelController extends BaseController<ModelBiz> {
   private JdbcSqlExecutor executor;
   @Resource
   private ModelTaskBiz taskBiz;
+  @Resource
+  private ModelTemplateBiz modelTemplateBiz;
 
   @PostMapping("models")
   public Result create(@RequestBody ModelDTO model) {
@@ -47,11 +52,12 @@ public class ModelController extends BaseController<ModelBiz> {
 
   /**
    * 运行模型
+   *
    * @param modelId
    * @return
    */
   @GetMapping("models/{modelId}")
-  public Result execute(@PathVariable Long modelId){
+  public Result execute(@PathVariable Long modelId) {
 
     //查询模型
     Model model = baseBiz.getOneById(Model.class, modelId);
@@ -83,5 +89,20 @@ public class ModelController extends BaseController<ModelBiz> {
     }
 
     return Result.ok();
+  }
+
+  @ApiOperation("设置模型为模版")
+  @GetMapping("{modelId}/templates")
+  public Result useTemplate(@PathVariable Long modelId) {
+    //查询模型
+    Model model = baseBiz.getOneById(Model.class, modelId);
+
+    ModelTemplate template = new ModelTemplate();
+    template.setName(model.getName());
+    template.setDefinition(model.getDefinition());
+    template.setMid(model.getId());
+
+    modelTemplateBiz.save(template);
+    return Result.ok(template);
   }
 }
