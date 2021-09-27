@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ModelTaskBizImpl extends
@@ -26,6 +27,7 @@ public class ModelTaskBizImpl extends
   @Resource
   private ModelTaskRecordDao recordDao;
 
+  @Transactional(rollbackFor = RuntimeException.class)
   @Override
   public ModelTaskRecord execute(ModelTask task) {
 
@@ -35,10 +37,10 @@ public class ModelTaskBizImpl extends
     record.setTid(task.getId());
     record.setExecute(task.getImprovement());
 
-    recordDao.save(record);
+    ModelTaskRecord _record =recordDao.save(record);
 
-    record.setCollection(VIEW_PREFIX + record.getId());
-    mongoTemplate.insert(executor.execute(task.getImprovement()), record.getCollection());
+    _record.setCollection(VIEW_PREFIX + record.getId());
+    mongoTemplate.insert(executor.execute(task.getImprovement()), _record.getCollection());
     return record;
   }
 

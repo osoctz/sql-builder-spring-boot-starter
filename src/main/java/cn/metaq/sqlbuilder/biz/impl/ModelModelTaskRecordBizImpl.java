@@ -9,11 +9,16 @@ import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 模型任务
+ *
+ * @author zantang
+ */
 @Service
 public class ModelModelTaskRecordBizImpl extends
     BaseBiz<ModelTaskRecord, Long, ModelTaskRecordDao> implements
@@ -38,8 +43,8 @@ public class ModelModelTaskRecordBizImpl extends
     record.setExecute(task.getImprovement());
 
     dao.save(record);
-
     record.setCollection(VIEW_PREFIX + record.getId());
+
     mongoTemplate.insert(data, record.getCollection());
 
     return record;
