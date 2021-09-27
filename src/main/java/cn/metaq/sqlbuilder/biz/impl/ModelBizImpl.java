@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
  * @author zantang
  */
 @Service
-public class ModelBizImpl extends
-    BaseBiz<Model, Long, ModelDao> implements
-    ModelBiz {
+public class ModelBizImpl extends BaseBiz<Model, Long, ModelDao> implements ModelBiz {
 
   @Override
   public Specification map(Model model) {

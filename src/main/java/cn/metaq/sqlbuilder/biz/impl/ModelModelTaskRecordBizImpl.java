@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.biz.impl;
 
 import cn.metaq.data.jpa.BaseBiz;
-import cn.metaq.sqlbuilder.biz.TaskRecordBiz;
+import cn.metaq.sqlbuilder.biz.ModelTaskRecordBiz;
 import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
 import cn.metaq.sqlbuilder.model.ModelTask;
 import cn.metaq.sqlbuilder.model.ModelTaskRecord;
@@ -15,9 +15,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ModelTaskRecordBizImpl extends
+public class ModelModelTaskRecordBizImpl extends
     BaseBiz<ModelTaskRecord, Long, ModelTaskRecordDao> implements
-    TaskRecordBiz {
+    ModelTaskRecordBiz {
 
   private static final String VIEW_PREFIX = "record_";
 

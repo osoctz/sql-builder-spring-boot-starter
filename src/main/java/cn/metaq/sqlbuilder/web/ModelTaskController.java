@@ -5,7 +5,7 @@ import cn.metaq.common.web.BaseController;
 import cn.metaq.common.web.dto.Result;
 import cn.metaq.sqlbuilder.biz.ModelBiz;
 import cn.metaq.sqlbuilder.biz.ModelTaskBiz;
-import cn.metaq.sqlbuilder.biz.TaskRecordBiz;
+import cn.metaq.sqlbuilder.biz.ModelTaskRecordBiz;
 import cn.metaq.sqlbuilder.dto.ModelDTO;
 import cn.metaq.sqlbuilder.model.Model;
 import cn.metaq.sqlbuilder.model.ModelTask;
@@ -31,7 +31,7 @@ public class ModelTaskController extends BaseController<ModelTaskBiz> {
   private ModelBiz modelBiz;
 
   @Resource
-  private TaskRecordBiz taskRecordBiz;
+  private ModelTaskRecordBiz modelTaskRecordBiz;
 
   /**
    * 提交任务
@@ -72,7 +72,7 @@ public class ModelTaskController extends BaseController<ModelTaskBiz> {
 
     ModelTask task = baseBiz.getOneById(ModelTask.class, taskId);
 
-    ModelTaskRecord record = taskRecordBiz.execute(task);
+    ModelTaskRecord record = modelTaskRecordBiz.execute(task);
 
     return Result.ok(record);
   }
