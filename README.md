@@ -1,10 +1,10 @@
 ## 表可选字段说明
 ```json5
 {
-  "type": "TABLE",
+  "type": "CONCAT, COUNT, DIFF, DISTINCT, FILTER, INNER_JOIN, LEFT_JOIN, ORDER, PAGE, RIGHT_JOIN, SUM, TABLE, UNION",
   "name": "t_person1",
-  "dialect": "MYSQL",  //当有方言区别时需要设置，比如mysql分页时limit，oracle是rownum
-  "schema": "test_srv", //当sql执行当表不在当前db时需要设置
+  "dialect": "MYSQL",  //type=TABLE时，且有方言区别时需要设置，比如mysql分页时limit，oracle是rownum
+  "schema": "test_srv", //type=TABLE时，且当sql执行当表不在当前db时需要设置
   "fields": [
     "id",
     "name",
@@ -115,7 +115,7 @@ SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 
   "debug": false,
   "name": "合并列值",
   "details": {
-    "type": "GROUP_CONCAT",
+    "type": "CONCAT",
     "group_by_fields": [
       "age"
     ],
