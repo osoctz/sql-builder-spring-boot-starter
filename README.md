@@ -22,7 +22,7 @@
   "name": "统计",
   "details": {
     "type": "COUNT",
-    "group_by_fields": [
+    "groupByFields": [
       "age"
     ],
     "alias": "c0",
@@ -52,7 +52,7 @@ SELECT t0.age,count(1) FROM t_person1 t0 GROUP BY t0.age
   "name": "去重",
   "details": {
     "type":"DISTINCT",
-    "distinct_fields": ["age"],
+    "distinctFields": ["age"],
     "source": {
       "type": "TABLE",
       "name": "t_person1",
@@ -74,7 +74,7 @@ SELECT DISTINCT t0.age FROM t_person1 t0
   "name": "过滤",
   "details": {
     "type": "FILTER",
-    "select_fields": [
+    "selectFields": [
       "id",
       "name",
       "age"
@@ -116,10 +116,10 @@ SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 
   "name": "合并列值",
   "details": {
     "type": "CONCAT",
-    "group_by_fields": [
+    "groupByFields": [
       "age"
     ],
-    "group_concat_fields": [
+    "concatFields": [
       "name"
     ],
     "alias": "g0",
@@ -147,7 +147,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
   "name": "关联",
   "details": {
     "type": "LEFT_JOIN",
-    "join_fields": {
+    "joinFields": {
       "left": [
         "id",
         "name"
@@ -164,7 +164,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     ],
     "left": {
       "type": "FILTER",
-      "select_fields": [
+      "selectFields": [
         "id",
         "name",
         "age"
@@ -191,7 +191,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     },
     "right": {
       "type": "FILTER",
-      "select_fields": [
+      "selectFields": [
         "id",
         "name",
         "age"
@@ -242,7 +242,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
   "name": "交集",
   "details": {
     "type": "SAME",
-    "union_fields": {
+    "unionFields": {
       "left": [
         "name"
       ],
@@ -253,6 +253,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     "left": {
       "type": "TABLE",
       "name": "t_person2",
+      "schema": "test_srv",
       "fields": [
         "id",
         "name",
@@ -262,6 +263,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     "right": {
       "type": "TABLE",
       "name": "t_person1",
+      "schema": "test_srv",
       "fields": [
         "id",
         "name",
@@ -285,7 +287,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
   "name": "差集",
   "details": {
     "type": "DIFF",
-    "union_fields": {
+    "unionFields": {
       "left": ["id","name","age"],
       "right": ["id","name","age"]
     },
@@ -328,6 +330,45 @@ WHERE NOT EXISTS (
     WHERE _j0.id = _u0.id
     )
 ```
+##并集
+```json5
+{
+  "type": "union",
+  "unionFields": {
+    "left": [
+      "id",
+      "name",
+      "age"
+    ],
+    "right": [
+      "id",
+      "name",
+      "age"
+    ]
+  },
+  "left": {
+    "type": "TABLE",
+    "name": "t_person2",
+    "schema": "test_srv",
+    "fields": [
+      "id",
+      "name",
+      "age"
+    ]
+  },
+  "right": {
+    "type": "TABLE",
+    "name": "t_person1",
+    "schema": "test_srv",
+    "fields": [
+      "id",
+      "name",
+      "age"
+    ]
+  },
+  "alias": "u0"
+}
+```
 
 ## 分页
 ```json5
@@ -350,7 +391,7 @@ WHERE NOT EXISTS (
         "age"
       ]
     },
-    "order_fields": [
+    "orderFields": [
       {
         "name": "id",
         "type": "ASC"
@@ -368,7 +409,7 @@ SELECT t0.name,t0.id,t0.age FROM t_person1 t0 ORDER BY t0.id DESC LIMIT 20, 10
 ```json5
 {
   "type": "ORDER",
-  "order_fields":[
+  "orderFields":[
     {
       "name": "age",
       "type": "DESC|ASC"
