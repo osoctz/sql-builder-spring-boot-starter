@@ -23,7 +23,10 @@
   "details": {
     "type": "COUNT",
     "groupByFields": [
-      "age"
+      {
+        "name": "age",
+        "alias": "_age0"
+      }
     ],
     "alias": "c0",
     "source": {
@@ -41,32 +44,68 @@
 
 ```
 ```sql
-SELECT t0.age,count(1) FROM t_person1 t0 GROUP BY t0.age
+SELECT t0.age AS _age0,count(1) AS count FROM test_srv.t_person1 t0 GROUP BY t0.age
 
 ```
 ###求和
 ```json5
 {
-  "type": "SUM",
-  "groupByFields":[],
-  "sumFields": [],
-  "source":{},
-  "alias": ""
+  "debug": false,
+  "name": "求和",
+  "details": {
+    "type": "SUM",
+    "groupByFields": [
+      {
+        "name": "name",
+        "alias": "_name0"
+      }
+    ],
+    "sumFields": [
+      {
+        "name": "age",
+        "alias": "_age0"
+      }
+    ],
+    "source": {
+      "type": "TABLE",
+      "name": "t_person1",
+      "schema": "test_srv",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    },
+    "alias": "s0"
+  }
 }
 ```
 
+```sql
+SELECT SUM(t0.age) AS _age0,t0.name AS _name0 FROM test_srv.t_person1 t0 GROUP BY t0.name
+```
 ## 去重示例
 ```json5
 {
   "debug": false,
   "name": "去重",
   "details": {
-    "type":"DISTINCT",
-    "distinctFields": ["age"],
+    "type": "DISTINCT",
+    "distinctFields": [
+      {
+        "name": "age",
+        "alias": "_age0"
+      }
+    ],
     "source": {
       "type": "TABLE",
       "name": "t_person1",
-      "fields": ["id","name","age"]
+      "schema": "test_srv",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
     },
     "alias": "d0"
   }
@@ -74,7 +113,7 @@ SELECT t0.age,count(1) FROM t_person1 t0 GROUP BY t0.age
 ```
 
 ```sql
-SELECT DISTINCT t0.age FROM t_person1 t0
+SELECT DISTINCT t0.age AS _age0 FROM test_srv.t_person1 t0
 ```
 
 ## 过滤示例
@@ -85,9 +124,18 @@ SELECT DISTINCT t0.age FROM t_person1 t0
   "details": {
     "type": "FILTER",
     "selectFields": [
-      "id",
-      "name",
-      "age"
+      {
+        "name": "id",
+        "alias": "_id0"
+      },
+      {
+        "name": "name",
+        "alias": "_name0"
+      },
+      {
+        "name": "age",
+        "alias": "_age0"
+      }
     ],
     "chain": {
       "conditions": [
@@ -101,6 +149,7 @@ SELECT DISTINCT t0.age FROM t_person1 t0
     "source": {
       "type": "TABLE",
       "name": "t_person2",
+      "schema": "test_srv",
       "fields": [
         "id",
         "name",
@@ -113,10 +162,7 @@ SELECT DISTINCT t0.age FROM t_person1 t0
 ```
 
 ```sql
-SELECT t0.id,t0.name,t0.age FROM t_person2 t0 WHERE (t0.age > 10)
-
-SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 t0 LIMIT 0, 10) AS _l0 WHERE (_l0.age > 10)
-
+SELECT t0.id AS _id0,t0.name AS _name0,t0.age AS _age0 FROM test_srv.t_person2 t0 WHERE (t0.age > 10)
 ```
 
 ## 合并列值
@@ -126,16 +172,24 @@ SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 
   "name": "合并列值",
   "details": {
     "type": "CONCAT",
+    "dialect": "MYSQL",
     "groupByFields": [
-      "age"
+      {
+        "name": "age",
+        "alias": "_age0"
+      }
     ],
     "concatFields": [
-      "name"
+      {
+        "name": "name",
+        "alias": "_name0"
+      }
     ],
     "alias": "g0",
     "source": {
       "type": "TABLE",
       "name": "t_person1",
+      "schema": "test_srv",
       "fields": [
         "id",
         "name",
@@ -147,7 +201,7 @@ SELECT _l0.id,_l0.name,_l0.age FROM (SELECT t0.name,t0.id,t0.age FROM t_person2 
 ```
 
 ```sql
-SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
+SELECT t0.age AS _age0,group_concat(t0.name) AS _name0 FROM test_srv.t_person1 t0 GROUP BY t0.age
 ```
 
 ## 关联示例
@@ -159,29 +213,48 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     "type": "LEFT_JOIN",
     "joinFields": {
       "left": [
-        "id",
-        "name"
+        {
+          "name": "_id0",
+          "alias": "_id2"
+        },
+        {
+          "name": "_name0",
+          "alias": "_name2"
+        }
       ],
       "right": [
-        "age"
+        {
+          "name": "_age1",
+          "alias": "_age3"
+        }
       ]
     },
     "on": [
       {
-        "left": "name",
-        "right": "name"
+        "left": "_name0",
+        "right": "_name1"
       }
     ],
     "left": {
       "type": "FILTER",
       "selectFields": [
-        "id",
-        "name",
-        "age"
+        {
+          "name": "id",
+          "alias": "_id0"
+        },
+        {
+          "name": "name",
+          "alias": "_name0"
+        },
+        {
+          "name": "age",
+          "alias": "_age0"
+        }
       ],
       "source": {
         "type": "TABLE",
         "name": "t_person2",
+        "schema": "test_srv",
         "fields": [
           "id",
           "name",
@@ -202,13 +275,23 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     "right": {
       "type": "FILTER",
       "selectFields": [
-        "id",
-        "name",
-        "age"
+        {
+          "name": "id",
+          "alias": "_id1"
+        },
+        {
+          "name": "name",
+          "alias": "_name1"
+        },
+        {
+          "name": "age",
+          "alias": "_age1"
+        }
       ],
       "source": {
         "type": "TABLE",
         "name": "t_person1",
+        "schema": "test_srv",
         "fields": [
           "id",
           "name",
@@ -232,18 +315,18 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
 ```
 
 ```sql
-    SELECT 
-           v2.id,v2.name,v1.age 
-    FROM (SELECT 
-                 t0.id,t0.name,t0.age 
-          FROM t_person2 t0 
-          WHERE (t0.age > 5)) AS v2 
-    LEFT OUTER JOIN (SELECT 
-                            t1.id,t1.name,t1.age 
-                   FROM t_person1 t1 
-                   WHERE (t1.age > 10)) AS v1 
-    ON (v2.name = v1.name)
-
+  SELECT v2._id0 AS _id2, v2._name0 AS _name2, v1._age1 AS _age3
+  FROM (
+      SELECT t0.id AS _id0, t0.name AS _name0, t0.age AS _age0
+      FROM test_srv.t_person2 t0
+      WHERE t0.age > 5
+      ) v2
+      LEFT JOIN (
+      SELECT t1.id AS _id1, t1.name AS _name1, t1.age AS _age1
+      FROM test_srv.t_person1 t1
+      WHERE t1.age > 10
+      ) v1
+  ON v2._name0 = v1._name1
 ```
 ## 交集
 ```json5
@@ -252,12 +335,18 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
   "name": "交集",
   "details": {
     "type": "SAME",
-    "unionFields": {
+    "sameFields": {
       "left": [
-        "name"
+        {
+          "name": "name",
+          "alias": "_name0"
+        }
       ],
       "right": [
-        "name"
+        {
+          "name": "name",
+          "alias": "_name1"
+        }
       ]
     },
     "left": {
@@ -286,7 +375,7 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
 ```
 
 ```sql
-    SELECT t0.name FROM test_srv.t_person2 t0 INNER JOIN test_srv.t_person1 t1 ON (t0.name = t1.name)
+SELECT t0.name AS _name0 FROM test_srv.t_person2 t0 INNER JOIN test_srv.t_person1 t1 ON (t0.name = t1.name)
 
 ```
 
@@ -297,9 +386,35 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
   "name": "差集",
   "details": {
     "type": "DIFF",
-    "unionFields": {
-      "left": ["id","name","age"],
-      "right": ["id","name","age"]
+    "diffFields": {
+      "left": [
+        {
+          "name": "id",
+          "alias": "_id0"
+        },
+        {
+          "name": "name",
+          "alias": "_name0"
+        },
+        {
+          "name": "age",
+          "alias": "_age0"
+        }
+      ],
+      "right": [
+        {
+          "name": "id",
+          "alias": "_id1"
+        },
+        {
+          "name": "name",
+          "alias": "_name1"
+        },
+        {
+          "name": "age",
+          "alias": "_age1"
+        }
+      ]
     },
     "on": [
       {
@@ -310,11 +425,13 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
     "left": {
       "type": "TABLE",
       "name": "t_person1",
+      "schema": "test_srv",
       "fields": ["id","name","age"]
     },
     "right": {
       "type": "TABLE",
       "name": "t_person2",
+      "schema": "test_srv",
       "fields": ["id","name","age"]
     },
     "alias": "e0"
@@ -322,20 +439,20 @@ SELECT t0.age,group_concat(t0.name) FROM t_person1 t0 GROUP BY t0.age
 }
 ```
 ```sql
-SELECT _u0.id, _u0.NAME, _u0.age
+SELECT _u0.id AS _id0, _u0.name AS _name0, _u0.age AS _age0
 FROM (
-    SELECT t0.id, t0.NAME, t0.age
-    FROM t_person1 t0
+    SELECT t0.id, t0.name, t0.age
+    FROM test_srv.t_person1 t0
     UNION
-    SELECT t1.id, t1.NAME, t1.age
-    FROM t_person2 t1
+    SELECT t1.id, t1.name, t1.age
+    FROM test_srv.t_person2 t1
     ) _u0
 WHERE NOT EXISTS (
-    SELECT _j0.id, _j0.NAME, _j0.age
+    SELECT _j0.id AS _id0, _j0.name AS _name0, _j0.age AS _age0
     FROM (
-    SELECT t2.id, t2.NAME, t2.age
-    FROM t_person1 t2
-    INNER JOIN t_person2 t3 ON t2.id = t3.id
+    SELECT t2.id, t2.name, t2.age
+    FROM test_srv.t_person1 t2
+    INNER JOIN test_srv.t_person2 t3 ON t2.id = t3.id
     ) _j0
     WHERE _j0.id = _u0.id
     )
@@ -343,41 +460,67 @@ WHERE NOT EXISTS (
 ##并集
 ```json5
 {
-  "type": "union",
-  "unionFields": {
-    "left": [
-      "id",
-      "name",
-      "age"
-    ],
-    "right": [
-      "id",
-      "name",
-      "age"
-    ]
-  },
-  "left": {
-    "type": "TABLE",
-    "name": "t_person2",
-    "schema": "test_srv",
-    "fields": [
-      "id",
-      "name",
-      "age"
-    ]
-  },
-  "right": {
-    "type": "TABLE",
-    "name": "t_person1",
-    "schema": "test_srv",
-    "fields": [
-      "id",
-      "name",
-      "age"
-    ]
-  },
-  "alias": "u0"
+  "debug": false,
+  "name": "并集",
+  "details": {
+    "type": "UNION",
+    "unionFields": {
+      "left": [
+        {
+          "name": "id",
+          "alias": "_id0"
+        },
+        {
+          "name": "name",
+          "alias": "_name0"
+        },
+        {
+          "name": "age",
+          "alias": "_age0"
+        }
+      ],
+      "right": [
+        {
+          "name": "id",
+          "alias": "_id1"
+        },
+        {
+          "name": "name",
+          "alias": "_name1"
+        },
+        {
+          "name": "age",
+          "alias": "_age1"
+        }
+      ]
+    },
+    "left": {
+      "type": "TABLE",
+      "name": "t_person2",
+      "schema": "test_srv",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    },
+    "right": {
+      "type": "TABLE",
+      "name": "t_person1",
+      "schema": "test_srv",
+      "fields": [
+        "id",
+        "name",
+        "age"
+      ]
+    },
+    "alias": "u0"
+  }
 }
+```
+
+```sql
+
 ```
 
 ## 分页

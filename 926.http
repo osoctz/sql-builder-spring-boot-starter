@@ -43,15 +43,37 @@ Content-Type: application/json
 
 {
   "debug": false,
-  "name": "交集",
+  "name": "并集",
   "details": {
-    "type": "SAME",
+    "type": "UNION",
     "unionFields": {
       "left": [
-        "name"
+        {
+          "name": "id",
+          "alias": "_id0"
+        },
+        {
+          "name": "name",
+          "alias": "_name0"
+        },
+        {
+          "name": "age",
+          "alias": "_age0"
+        }
       ],
       "right": [
-        "name"
+        {
+          "name": "id",
+          "alias": "_id1"
+        },
+        {
+          "name": "name",
+          "alias": "_name1"
+        },
+        {
+          "name": "age",
+          "alias": "_age1"
+        }
       ]
     },
     "left": {
@@ -74,9 +96,10 @@ Content-Type: application/json
         "age"
       ]
     },
-    "alias": "v3"
+    "alias": "u0"
   }
 }
+
 
 ### 设置为模版
 GET http://localhost:8080/602500042847412224/templates
@@ -87,7 +110,7 @@ GET http://localhost:8080/modelTemplate/602506206024818688
 Content-Type: application/json
 
 ### 运行模型
-GET http://localhost:8080/models/602500042847412224
+GET http://localhost:8080/models/602845307823411200
 Content-Type: application/json
 
 

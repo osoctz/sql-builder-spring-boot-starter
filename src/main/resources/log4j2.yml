@@ -53,7 +53,7 @@ Configuration:
     Logger: # cn.***包配置特殊的Log级别，方便调试，trace会打印SQL具体结果，debug只打印SQL语句
       - name: cn.metaq
         additivity: false
-        level: info
+        level: debug
         AppenderRef:
           - ref: CONSOLE
           - ref: ROLLING_FILE
