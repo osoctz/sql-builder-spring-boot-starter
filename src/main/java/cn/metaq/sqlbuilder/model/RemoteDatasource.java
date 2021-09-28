@@ -69,32 +69,32 @@ public class RemoteDatasource implements IEntity<Long>{
 	/**
 	 * 额外的参数
 	 */
-	@Column(name = "additionalInformation" )
+	@Column(name = "additional_information" )
 	private String additionalInformation;
 
 	/**
 	 * 创建者
 	 */
-	@Column(name = "createdBy" )
+	@Column(name = "created_by" )
 	private String createdBy;
 
 	/**
 	 * 创建时间
 	 */
-	@Column(name = "createdTs" )
+	@Column(name = "created_ts" )
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date createdTs;
 
 	/**
 	 * 更新者
 	 */
-	@Column(name = "updatedBy" )
+	@Column(name = "updated_by" )
 	private String updatedBy;
 
 	/**
 	 * 更新时间
 	 */
-	@Column(name = "updatedTs" )
+	@Column(name = "updated_ts" )
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date updatedTs;
 

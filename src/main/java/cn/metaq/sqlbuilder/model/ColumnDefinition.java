@@ -33,7 +33,7 @@ public class ColumnDefinition implements IEntity<Long>{
 	/**
 	 * 类型
 	 */
-	@Column(name = "dataType" )
+	@Column(name = "data_type" )
 	private String dataType;
 
 	/**
@@ -45,13 +45,13 @@ public class ColumnDefinition implements IEntity<Long>{
 	/**
 	 * 创建者
 	 */
-	@Column(name = "createdBy" )
+	@Column(name = "created_by" )
 	private String createdBy;
 
 	/**
 	 * 创建时间
 	 */
-	@Column(name = "createdTs" )
+	@Column(name = "created_ts" )
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date createdTs;
 

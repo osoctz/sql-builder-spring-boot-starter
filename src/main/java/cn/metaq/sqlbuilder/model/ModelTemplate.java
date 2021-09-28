@@ -55,13 +55,13 @@ public class ModelTemplate implements IEntity<Long>{
 	/**
 	 * 创建者
 	 */
-	@Column(name = "createdBy" )
+	@Column(name = "created_by" )
 	private String createdBy;
 
 	/**
 	 * 创建时间
 	 */
-	@Column(name = "createdTs" )
+	@Column(name = "created_ts" )
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date createdTs;
 
