@@ -44,6 +44,16 @@
 SELECT t0.age,count(1) FROM t_person1 t0 GROUP BY t0.age
 
 ```
+###求和
+```json5
+{
+  "type": "SUM",
+  "groupByFields":[],
+  "sumFields": [],
+  "source":{},
+  "alias": ""
+}
+```
 
 ## 去重示例
 ```json5
