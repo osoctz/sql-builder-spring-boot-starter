@@ -16,10 +16,10 @@ import lombok.Setter;
  * @author tom
  */
 @Entity
-@Table(name = "t_def_model_graph")
+@Table(name = "t_hi_model_result_header")
 @Setter
 @Getter
-public class ModelGraph implements IEntity<Long>{
+public class ModelResultHeader implements IEntity<Long>{
 
 	private static final long serialVersionUID =  7813001343889421368L;
 
@@ -28,13 +28,17 @@ public class ModelGraph implements IEntity<Long>{
 	private Long id;
 
 	/**
-	 * 模型定义表id
+	 * 模型运行记录id
 	 */
-	private Long mid;
+	private Long rid;
 
 	/**
-	 * 前端需要的点和线坐标数据
+	 * 字段名
 	 */
-	private String graph;
+	private String name;
 
+	/**
+	 * 注释
+	 */
+	private String comment;
 }

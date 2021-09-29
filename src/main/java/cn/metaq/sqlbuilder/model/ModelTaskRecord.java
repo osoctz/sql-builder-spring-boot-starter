@@ -32,10 +32,9 @@ public class ModelTaskRecord implements IEntity<Long> {
   private Long id;
 
   private Long tid;
-
   private String execute;
-
   private String collection;
+  private String columns;
 
   @Column(name = "created_by")
   private String createdBy;

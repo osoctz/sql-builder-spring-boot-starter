@@ -3,6 +3,7 @@ package cn.metaq.sqlbuilder.biz.impl;
 import cn.metaq.data.jpa.BaseBiz;
 import cn.metaq.sqlbuilder.biz.ModelTaskRecordBiz;
 import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
+import cn.metaq.sqlbuilder.dto.ColumnDTO;
 import cn.metaq.sqlbuilder.model.ModelTask;
 import cn.metaq.sqlbuilder.model.ModelTaskRecord;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
@@ -41,6 +42,7 @@ public class ModelModelTaskRecordBizImpl extends
     ModelTaskRecord record = new ModelTaskRecord();
     record.setTid(task.getId());
     record.setExecute(task.getImprovement());
+    record.setColumns(task.getColumns());
 
     dao.save(record);
     record.setCollection(VIEW_PREFIX + record.getId());

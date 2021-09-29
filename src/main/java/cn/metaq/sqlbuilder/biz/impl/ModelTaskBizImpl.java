@@ -2,11 +2,16 @@ package cn.metaq.sqlbuilder.biz.impl;
 
 import cn.metaq.data.jpa.BaseBiz;
 import cn.metaq.sqlbuilder.biz.ModelTaskBiz;
+import cn.metaq.sqlbuilder.dao.ModelResultHeaderDao;
 import cn.metaq.sqlbuilder.dao.ModelTaskDao;
 import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
+import cn.metaq.sqlbuilder.dto.ColumnDTO;
+import cn.metaq.sqlbuilder.model.ModelResultHeader;
 import cn.metaq.sqlbuilder.model.ModelTask;
 import cn.metaq.sqlbuilder.model.ModelTaskRecord;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,21 +31,24 @@ public class ModelTaskBizImpl extends
   private MongoTemplate mongoTemplate;
   @Resource
   private ModelTaskRecordDao recordDao;
+  @Resource
+  private ModelResultHeaderDao resultHeaderDao;
 
   @Transactional(rollbackFor = RuntimeException.class)
   @Override
   public ModelTaskRecord execute(ModelTask task) {
 
-    task= dao.save(task);
+    task = dao.save(task);
 
     ModelTaskRecord record = new ModelTaskRecord();
     record.setTid(task.getId());
     record.setExecute(task.getImprovement());
+    record.setColumns(task.getColumns());
 
-    ModelTaskRecord _record =recordDao.save(record);
+    recordDao.save(record);
 
-    _record.setCollection(VIEW_PREFIX + record.getId());
-    mongoTemplate.insert(executor.execute(task.getImprovement()), _record.getCollection());
+    record.setCollection(VIEW_PREFIX + record.getId());
+    mongoTemplate.insert(executor.execute(task.getImprovement()), record.getCollection());
     return record;
   }
 

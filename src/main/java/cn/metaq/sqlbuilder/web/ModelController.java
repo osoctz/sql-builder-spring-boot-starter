@@ -72,6 +72,7 @@ public class ModelController extends BaseController<ModelBiz> {
     task.setImprovement(sql);
     task.setName(model.getName());
     task.setType(0);
+    task.setColumns(JsonUtils.toJson(modelDTO.getColumns()));
 
     return Result.ok(taskBiz.execute(task));
   }

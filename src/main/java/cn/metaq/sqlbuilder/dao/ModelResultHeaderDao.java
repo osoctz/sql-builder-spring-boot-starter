@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.dao;
 
 import cn.metaq.data.jpa.BaseDao;
-import cn.metaq.sqlbuilder.model.ModelGraph;
+import cn.metaq.sqlbuilder.model.ModelResultHeader;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @author tom
  */
 @Repository
-public interface ModelGraphDao extends BaseDao<ModelGraph, Long>{
+public interface ModelResultHeaderDao extends BaseDao<ModelResultHeader, Long>{
 }

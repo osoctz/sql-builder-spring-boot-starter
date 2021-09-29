@@ -36,6 +36,7 @@ public class ModelTask implements IEntity<Long> {
   private String build;
   private String improvement;
   private Integer type;
+  private String columns;
 
   @Column(name = "created_by")
   private String createdBy;

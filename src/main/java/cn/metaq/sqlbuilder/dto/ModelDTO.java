@@ -3,6 +3,7 @@ package cn.metaq.sqlbuilder.dto;
 import cn.metaq.std.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
 import cn.metaq.std.sqlbuilder.step.SqlbuilderStep;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,6 +29,11 @@ public class ModelDTO {
   private SqlbuilderStep details;
 
   private String graph;
+
+  /**
+   * 结果header
+   */
+  private List<ColumnDTO> columns;
 
   @Override
   public String toString() {
