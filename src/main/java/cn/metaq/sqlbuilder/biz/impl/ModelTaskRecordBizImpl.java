@@ -3,7 +3,6 @@ package cn.metaq.sqlbuilder.biz.impl;
 import cn.metaq.data.jpa.BaseBiz;
 import cn.metaq.sqlbuilder.biz.ModelTaskRecordBiz;
 import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
-import cn.metaq.sqlbuilder.dto.ColumnDTO;
 import cn.metaq.sqlbuilder.model.ModelTask;
 import cn.metaq.sqlbuilder.model.ModelTaskRecord;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author zantang
  */
 @Service
-public class ModelModelTaskRecordBizImpl extends
+public class ModelTaskRecordBizImpl extends
     BaseBiz<ModelTaskRecord, Long, ModelTaskRecordDao> implements
     ModelTaskRecordBiz {
 
@@ -33,7 +32,7 @@ public class ModelModelTaskRecordBizImpl extends
   @Resource
   private MongoTemplate mongoTemplate;
 
-  @Transactional
+  @Transactional(rollbackFor = RuntimeException.class)
   @Override
   public ModelTaskRecord execute(ModelTask task) {
 

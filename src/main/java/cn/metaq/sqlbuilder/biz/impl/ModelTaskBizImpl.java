@@ -2,16 +2,11 @@ package cn.metaq.sqlbuilder.biz.impl;
 
 import cn.metaq.data.jpa.BaseBiz;
 import cn.metaq.sqlbuilder.biz.ModelTaskBiz;
-import cn.metaq.sqlbuilder.dao.ModelResultHeaderDao;
 import cn.metaq.sqlbuilder.dao.ModelTaskDao;
 import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
-import cn.metaq.sqlbuilder.dto.ColumnDTO;
-import cn.metaq.sqlbuilder.model.ModelResultHeader;
 import cn.metaq.sqlbuilder.model.ModelTask;
 import cn.metaq.sqlbuilder.model.ModelTaskRecord;
 import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
-import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -31,8 +26,6 @@ public class ModelTaskBizImpl extends
   private MongoTemplate mongoTemplate;
   @Resource
   private ModelTaskRecordDao recordDao;
-  @Resource
-  private ModelResultHeaderDao resultHeaderDao;
 
   @Transactional(rollbackFor = RuntimeException.class)
   @Override
