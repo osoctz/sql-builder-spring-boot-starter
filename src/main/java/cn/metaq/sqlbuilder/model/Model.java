@@ -48,7 +48,7 @@ public class Model implements IEntity<Long> {
 
   @Column(name = "updated_ts")
   @Temporal(value = TemporalType.TIMESTAMP)
-  private Date updateTs;
+  private Date updatedTs;
 
   @PrePersist
   public void preCreate() {
@@ -59,6 +59,6 @@ public class Model implements IEntity<Long> {
   @PreUpdate
   public void preUpdate() {
     this.setUpdatedBy(UserContextUtils.getUser());
-    this.setUpdateTs(new Date());
+    this.setUpdatedTs(new Date());
   }
 }

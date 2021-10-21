@@ -1,18 +1,19 @@
 package cn.metaq.sqlbuilder.biz.impl;
 
+import cn.metaq.common.core.dto.Pagination;
 import cn.metaq.data.jpa.BaseBiz;
+import cn.metaq.data.jpa.BaseTemplate;
 import cn.metaq.sqlbuilder.biz.ModelTaskRecordBiz;
-import cn.metaq.sqlbuilder.dao.ModelTaskRecordDao;
-import cn.metaq.sqlbuilder.model.ModelTask;
-import cn.metaq.sqlbuilder.model.ModelTaskRecord;
-import cn.metaq.sqlbuilder.service.JdbcSqlExecutor;
+import cn.metaq.sqlbuilder.dao.ModelTaskRecordExtDao;
+import cn.metaq.sqlbuilder.dto.ModelTaskRecordViewDTO;
+import cn.metaq.sqlbuilder.model.ModelTaskRecordExt;
+import cn.metaq.sqlbuilder.qo.ModelTaskRecordQo;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 模型任务
@@ -20,39 +21,65 @@ import org.springframework.transaction.annotation.Transactional;
  * @author zantang
  */
 @Service
-public class ModelTaskRecordBizImpl extends
-    BaseBiz<ModelTaskRecord, Long, ModelTaskRecordDao> implements
+public class ModelTaskRecordBizImpl extends BaseBiz<ModelTaskRecordExt, Long, ModelTaskRecordExtDao> implements
     ModelTaskRecordBiz {
 
-  private static final String VIEW_PREFIX = "record_";
-
   @Resource
-  private JdbcSqlExecutor executor;
+  private BaseTemplate baseTemplate;
 
-  @Resource
-  private MongoTemplate mongoTemplate;
-
-  @Transactional(rollbackFor = RuntimeException.class)
   @Override
-  public ModelTaskRecord execute(ModelTask task) {
+  public Pagination<ModelTaskRecordViewDTO> list(ModelTaskRecordQo modelTaskRecordQo, int offset, int limit) {
 
-    List<Map<String, Object>> data = executor.execute(task.getImprovement());
+    String jql =
+        "select new ai.bailian.sqlbuilder.model.dto.ModelTaskRecordViewDTO(b.id," + "c.mid," + "d.name," + "b.status,"
+            + "a.collection) " + "from ModelTaskRecordExt a " + "left join TaskRecord b on a.id=b.id "
+            + "left join ModelTaskExt c on b.tid=c.id " + "left join Task d on b.tid=d.id where 1=1 ";
 
-    ModelTaskRecord record = new ModelTaskRecord();
-    record.setTid(task.getId());
-    record.setExecute(task.getImprovement());
-    record.setColumns(task.getColumns());
+    Map<String, Object> params = new HashMap<>(3);
 
-    dao.save(record);
-    record.setCollection(VIEW_PREFIX + record.getId());
+    jql = buildQueryString(modelTaskRecordQo, jql, params);
 
-    mongoTemplate.insert(data, record.getCollection());
+    List<ModelTaskRecordViewDTO> list = baseTemplate.list(ModelTaskRecordViewDTO.class, jql, params, offset, limit);
 
-    return record;
+    Pagination pagination = new Pagination();
+    pagination.setOffset(offset);
+    pagination.setLimit(limit);
+    pagination.setTotal(Math.toIntExact(this.count(modelTaskRecordQo)));
+    pagination.setData(list);
+    return pagination;
+  }
+
+  public Long count(ModelTaskRecordQo modelTaskRecordQo) {
+
+    String jql = "select count(1) " + "from ModelTaskRecordExt a " + "left join TaskRecord b on a.id=b.id "
+        + "left join ModelTaskExt c on b.tid=c.id " + "left join Task d on b.tid=d.id where 1=1 ";
+
+    Map<String, Object> params = new HashMap<>(3);
+    jql = buildQueryString(modelTaskRecordQo, jql, params);
+
+    return baseTemplate.count(jql, params);
+  }
+
+  private String buildQueryString(ModelTaskRecordQo modelTaskRecordQo, String jql, Map<String, Object> params) {
+    if (modelTaskRecordQo.getMid() != null) {
+      jql += " and c.mid=:mid";
+      params.put("mid", modelTaskRecordQo.getMid());
+    }
+
+    if (modelTaskRecordQo.getStatus() != null) {
+      jql += " and b.status=:status";
+      params.put("status", modelTaskRecordQo.getStatus());
+    }
+
+    if (modelTaskRecordQo.getName() != null && modelTaskRecordQo.getName().length() > 0) {
+      jql += " and d.name like :name";
+      params.put("name", "%" + modelTaskRecordQo.getName() + "%");
+    }
+    return jql;
   }
 
   @Override
-  public Specification map(ModelTaskRecord modelTaskRecord) {
+  public Specification map(ModelTaskRecordExt modelTaskRecord) {
     return null;
   }
 }

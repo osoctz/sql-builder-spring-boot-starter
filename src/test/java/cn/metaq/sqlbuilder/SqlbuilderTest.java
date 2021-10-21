@@ -2,11 +2,11 @@ package cn.metaq.sqlbuilder;
 
 import cn.metaq.sqlbuilder.dto.ModelDTO;
 import cn.metaq.std.sqlbuilder.service.SqlExecutor;
-import cn.metaq.std.sqlbuilder.step.DiffStep;
-import cn.metaq.std.sqlbuilder.step.DistinctStep;
-import cn.metaq.std.sqlbuilder.step.FilterStep;
-import cn.metaq.std.sqlbuilder.step.JoinStep;
-import cn.metaq.std.sqlbuilder.step.mysql.ConcatStep;
+import cn.metaq.std.sqlbuilder.step.DiffBuilderStep;
+import cn.metaq.std.sqlbuilder.step.DistinctBuilderStep;
+import cn.metaq.std.sqlbuilder.step.FilterBuilderStep;
+import cn.metaq.std.sqlbuilder.step.JoinBuilderStep;
+import cn.metaq.std.sqlbuilder.step.mysql.ConcatBuilderStep;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
@@ -167,7 +167,7 @@ public class SqlbuilderTest {
                 "}";
 
         ObjectMapper mapper = new ObjectMapper();
-        JoinStep joinStep=mapper.readValue(json, JoinStep.class);
+        JoinBuilderStep joinStep=mapper.readValue(json, JoinBuilderStep.class);
 
         DbSpec spec = new DbSpec();
         System.out.println(joinStep.build(spec).getQuery().validate());
@@ -230,7 +230,7 @@ public class SqlbuilderTest {
                 "}";
 
         ObjectMapper mapper = new ObjectMapper();
-        JoinStep joinStep=mapper.readValue(json, JoinStep.class);
+        JoinBuilderStep joinStep=mapper.readValue(json, JoinBuilderStep.class);
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addSchema("tlf");
@@ -259,15 +259,15 @@ public class SqlbuilderTest {
         DbSchema schema = spec.addSchema("tlf");
         String sql=model.getDetails().build(spec).getQuery().validate().toString();
         //System.out.println(sql);
-        model.getDetails().executor(new SqlExecutor() {
-            @Override
-            public List<Map<String, Object>> execute(String sql) {
-                //jdbc
-                //mybatis
-                System.out.println(sql);
-                return null;
-            }
-        }).preview(sql);
+//        model.getDetails().executor(new SqlExecutor() {
+//            @Override
+//            public List<Map<String, Object>> execute(String sql) {
+//                //jdbc
+//                //mybatis
+//                System.out.println(sql);
+//                return null;
+//            }
+//        }).preview(sql);
     }
 
     @Test
@@ -283,7 +283,7 @@ public class SqlbuilderTest {
                 "  }\n" +
                 "}";
         ObjectMapper mapper = new ObjectMapper();
-        DistinctStep step=mapper.readValue(json,DistinctStep.class);
+        DistinctBuilderStep step=mapper.readValue(json, DistinctBuilderStep.class);
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
@@ -315,7 +315,7 @@ public class SqlbuilderTest {
                 "}";
 
         ObjectMapper mapper = new ObjectMapper();
-        FilterStep step=mapper.readValue(json,FilterStep.class);
+        FilterBuilderStep step=mapper.readValue(json,FilterBuilderStep.class);
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
@@ -338,7 +338,7 @@ public class SqlbuilderTest {
                 "}";
 
         ObjectMapper mapper = new ObjectMapper();
-        ConcatStep step=mapper.readValue(json,ConcatStep.class);
+        ConcatBuilderStep step=mapper.readValue(json,ConcatBuilderStep.class);
 
         DbSpec spec = new DbSpec();
         System.out.println(step.build(spec).getQuery().validate());
@@ -397,7 +397,7 @@ public class SqlbuilderTest {
                 "  \"alias\": \"e0\"\n" +
                 "}";
         ObjectMapper mapper = new ObjectMapper();
-        DiffStep step=mapper.readValue(json,DiffStep.class);
+        DiffBuilderStep step=mapper.readValue(json, DiffBuilderStep.class);
 
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();

@@ -17,40 +17,54 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Date: Fri Oct 01 01:40:41 CST 2021.
  *
- * 模型运行任务定义表
- * @author zantang
+ * <p>任务基本信息表.
+ *
+ * @author tom
  */
-@Table(name = "t_def_model_task")
 @Entity
+@Table(name = "t_def_task")
 @Setter
 @Getter
-public class ModelTask implements IEntity<Long> {
+public class Task implements IEntity<Long> {
+
+  private static final long serialVersionUID = 4654870076608372230L;
 
   @Id
   @GeneratedValue(generator = "snowflakeId")
   @GenericGenerator(name = "snowflakeId", strategy = "cn.metaq.data.jpa.id.SnowflakeIdGenerator")
   private Long id;
 
+  /** 任务名称 */
+  @Column(name = "name")
   private String name;
-  private String build;
-  private String improvement;
-  private Integer type;
-  private String columns;
 
+  /** 0-模型任务 1-元数据同步 2-数据同步 */
+  @Column(name = "type")
+  private Integer type;
+
+  /** 0-立即执行，1-手动执行，3-定时调度 */
+  @Column(name = "mode")
+  private Integer mode;
+
+  /** 创建者 */
   @Column(name = "created_by")
   private String createdBy;
 
+  /** 创建时间 */
   @Column(name = "created_ts")
-  @Temporal(value = TemporalType.TIMESTAMP)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date createdTs;
 
+  /** 更新者 */
   @Column(name = "updated_by")
   private String updatedBy;
 
+  /** 更新时间 */
   @Column(name = "updated_ts")
-  @Temporal(value = TemporalType.TIMESTAMP)
-  private Date updateTs;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date updatedTs;
 
   @PrePersist
   public void preCreate() {
@@ -61,6 +75,6 @@ public class ModelTask implements IEntity<Long> {
   @PreUpdate
   public void preUpdate() {
     this.setUpdatedBy(UserContextUtils.getUser());
-    this.setUpdateTs(new Date());
+    this.setUpdatedTs(new Date());
   }
 }

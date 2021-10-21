@@ -1,6 +1,8 @@
 package cn.metaq.sqlbuilder.config;
 
+import cn.metaq.data.jpa.BaseTemplate;
 import com.zaxxer.hikari.HikariDataSource;
+import javax.persistence.EntityManager;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,6 +16,11 @@ import javax.sql.DataSource;
 @Configuration
 @Log4j2
 public class SqlbuilderConfiguration {
+
+    @Bean
+    public BaseTemplate template(EntityManager em) {
+        return new BaseTemplate(em);
+    }
 
     @ConfigurationProperties(prefix = "spring.datasource")
     @Primary

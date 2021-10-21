@@ -1,27 +1,29 @@
-package cn.metaq.sqlbuilder.dto;
+package cn.metaq.sqlbuilder.qo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * 字段
+ * 模型运行任务查询对象
  *
  * @author zantang
  */
 @Setter
 @Getter
-public class ColumnDTO implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ModelTaskQo implements Serializable {
 
+  private Long id;
   private String name;
-  private String comment;
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  private String columnType;
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  private Integer dataType;
+  private Integer type;
+  private Integer mode;
+  private Long mid;
 
   @Override
   public String toString() {

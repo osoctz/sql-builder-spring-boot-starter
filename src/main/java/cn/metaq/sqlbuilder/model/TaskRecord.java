@@ -16,31 +16,44 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Date: Fri Oct 01 01:41:20 CST 2021.
  *
- * 模型任务运行记录
- * @author zantang
+ * <p>任务运行记录表.
+ *
+ * @author tom
  */
-@Table(name = "t_hi_model_task_record")
 @Entity
+@Table(name = "t_hi_task_record")
 @Setter
 @Getter
-public class ModelTaskRecord implements IEntity<Long> {
+public class TaskRecord implements IEntity<Long> {
+
+  private static final long serialVersionUID = 845883914583374637L;
 
   @Id
   @GeneratedValue(generator = "snowflakeId")
   @GenericGenerator(name = "snowflakeId", strategy = "cn.metaq.data.jpa.id.SnowflakeIdGenerator")
   private Long id;
 
+  /** 任务id */
+  @Column(name = "tid")
   private Long tid;
-  private String execute;
-  private String collection;
-  private String columns;
 
+  /** 运行状态 0-成功 1-失败 */
+  @Column(name = "status")
+  private Integer status;
+
+  /** 错误信息 */
+  @Column(name = "error_msg")
+  private String errorMsg;
+
+  /** 创建者 */
   @Column(name = "created_by")
   private String createdBy;
 
+  /** 创建时间 */
   @Column(name = "created_ts")
-  @Temporal(value = TemporalType.TIMESTAMP)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date createdTs;
 
   @PrePersist

@@ -1,12 +1,25 @@
 package cn.metaq.sqlbuilder.biz;
 
+import cn.metaq.common.core.dto.Pagination;
 import cn.metaq.data.Biz;
-import cn.metaq.sqlbuilder.dto.ColumnDTO;
-import cn.metaq.sqlbuilder.model.ModelTask;
-import cn.metaq.sqlbuilder.model.ModelTaskRecord;
-import java.util.List;
+import cn.metaq.sqlbuilder.dto.ModelTaskRecordViewDTO;
+import cn.metaq.sqlbuilder.model.ModelTaskRecordExt;
+import cn.metaq.sqlbuilder.qo.ModelTaskRecordQo;
 
-public interface ModelTaskRecordBiz extends Biz<ModelTaskRecord,Long> {
+/**
+ * 模型任务记录
+ *
+ * @author zantang
+ */
+public interface ModelTaskRecordBiz extends Biz<ModelTaskRecordExt, Long> {
 
-  ModelTaskRecord execute(ModelTask task);
+  /**
+   * 结果视图分页查询
+   *
+   * @param modelTaskRecordQo
+   * @param offset
+   * @param limit
+   * @return
+   */
+  Pagination<ModelTaskRecordViewDTO> list(ModelTaskRecordQo modelTaskRecordQo, int offset, int limit);
 }
