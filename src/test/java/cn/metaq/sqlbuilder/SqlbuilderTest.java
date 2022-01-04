@@ -1,7 +1,6 @@
 package cn.metaq.sqlbuilder;
 
-import cn.metaq.sqlbuilder.dto.ModelDTO;
-import cn.metaq.std.sqlbuilder.service.SqlExecutor;
+import cn.metaq.sqlbuilder.model.dto.ModelDTO;
 import cn.metaq.std.sqlbuilder.step.DiffBuilderStep;
 import cn.metaq.std.sqlbuilder.step.DistinctBuilderStep;
 import cn.metaq.std.sqlbuilder.step.FilterBuilderStep;
@@ -20,8 +19,6 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
-import java.util.List;
-import java.util.Map;
 import org.junit.Test;
 
 public class SqlbuilderTest {

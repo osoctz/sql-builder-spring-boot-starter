@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.dao;
 
 import cn.metaq.data.jpa.BaseDao;
-import cn.metaq.sqlbuilder.model.ModelTaskRecordExt;
+import cn.metaq.sqlbuilder.model.entity.ModelTaskRecordExt;
 import org.springframework.stereotype.Repository;
 
 /**

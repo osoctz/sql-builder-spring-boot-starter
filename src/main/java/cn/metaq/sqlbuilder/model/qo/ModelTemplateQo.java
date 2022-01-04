@@ -1,4 +1,4 @@
-package cn.metaq.sqlbuilder.qo;
+package cn.metaq.sqlbuilder.model.qo;
 
 import java.io.Serializable;
 import lombok.Getter;

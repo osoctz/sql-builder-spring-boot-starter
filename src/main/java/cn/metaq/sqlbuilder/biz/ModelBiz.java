@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.biz;
 
 import cn.metaq.data.Biz;
-import cn.metaq.sqlbuilder.model.Model;
+import cn.metaq.sqlbuilder.model.entity.Model;
 
 /**
  * 模型定义biz接口

@@ -1,19 +1,26 @@
-package cn.metaq.sqlbuilder.qo;
+package cn.metaq.sqlbuilder.model.dto;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * 模型执行记录查询对象
+ * 模型执行结果视图
  *
  * @author zantang
  */
 @Setter
 @Getter
-public class ModelTaskRecordQo implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ModelTaskRecordViewDTO implements Serializable {
+
+  /** 记录id */
+  private Long id;
 
   /** 模型id */
   private Long mid;
@@ -23,6 +30,9 @@ public class ModelTaskRecordQo implements Serializable {
 
   /** 运行状态 0-成功 1-失败 */
   private Integer status;
+
+  /** mongo中集合名称 */
+  private String collection;
 
   @Override
   public String toString() {

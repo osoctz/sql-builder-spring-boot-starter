@@ -2,9 +2,9 @@ package cn.metaq.sqlbuilder.biz;
 
 import cn.metaq.common.core.dto.Pagination;
 import cn.metaq.data.Biz;
-import cn.metaq.sqlbuilder.dto.ModelTaskRecordViewDTO;
-import cn.metaq.sqlbuilder.model.ModelTaskRecordExt;
-import cn.metaq.sqlbuilder.qo.ModelTaskRecordQo;
+import cn.metaq.sqlbuilder.model.dto.ModelTaskRecordViewDTO;
+import cn.metaq.sqlbuilder.model.entity.ModelTaskRecordExt;
+import cn.metaq.sqlbuilder.model.qo.ModelTaskRecordQo;
 
 /**
  * 模型任务记录

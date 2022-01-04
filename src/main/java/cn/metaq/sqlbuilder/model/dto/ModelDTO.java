@@ -1,4 +1,4 @@
-package cn.metaq.sqlbuilder.dto;
+package cn.metaq.sqlbuilder.model.dto;
 
 import cn.metaq.std.sqlbuilder.jackson.databind.SqlbuilderStepDeserializer;
 import cn.metaq.std.sqlbuilder.step.SqlbuilderStep;

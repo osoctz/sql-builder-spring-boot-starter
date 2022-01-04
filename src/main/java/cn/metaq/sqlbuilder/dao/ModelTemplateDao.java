@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.dao;
 
 import cn.metaq.data.jpa.BaseDao;
-import cn.metaq.sqlbuilder.model.ModelTemplate;
+import cn.metaq.sqlbuilder.model.entity.ModelTemplate;
 import org.springframework.stereotype.Repository;
 
 /**

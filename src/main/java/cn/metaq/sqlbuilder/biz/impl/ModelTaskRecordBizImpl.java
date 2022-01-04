@@ -5,13 +5,22 @@ import cn.metaq.data.jpa.BaseBiz;
 import cn.metaq.data.jpa.BaseTemplate;
 import cn.metaq.sqlbuilder.biz.ModelTaskRecordBiz;
 import cn.metaq.sqlbuilder.dao.ModelTaskRecordExtDao;
-import cn.metaq.sqlbuilder.dto.ModelTaskRecordViewDTO;
-import cn.metaq.sqlbuilder.model.ModelTaskRecordExt;
-import cn.metaq.sqlbuilder.qo.ModelTaskRecordQo;
+import cn.metaq.sqlbuilder.model.dto.ModelTaskRecordViewDTO;
+import cn.metaq.sqlbuilder.model.entity.ModelTaskRecordExt;
+import cn.metaq.sqlbuilder.model.entity.QModelTaskExt;
+import cn.metaq.sqlbuilder.model.entity.QModelTaskRecordExt;
+import cn.metaq.sqlbuilder.model.entity.QTask;
+import cn.metaq.sqlbuilder.model.entity.QTaskRecord;
+import cn.metaq.sqlbuilder.model.qo.ModelTaskRecordQo;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -21,25 +30,32 @@ import org.springframework.stereotype.Service;
  * @author zantang
  */
 @Service
-public class ModelTaskRecordBizImpl extends BaseBiz<ModelTaskRecordExt, Long, ModelTaskRecordExtDao> implements
-    ModelTaskRecordBiz {
-
-  @Resource
-  private BaseTemplate baseTemplate;
+public class ModelTaskRecordBizImpl extends
+    BaseBiz<ModelTaskRecordExt, ModelTaskRecordExt, Long, ModelTaskRecordExtDao> implements ModelTaskRecordBiz {
+  @Autowired
+  private JPAQueryFactory jqf;
 
   @Override
   public Pagination<ModelTaskRecordViewDTO> list(ModelTaskRecordQo modelTaskRecordQo, int offset, int limit) {
 
-    String jql =
-        "select new ai.bailian.sqlbuilder.model.dto.ModelTaskRecordViewDTO(b.id," + "c.mid," + "d.name," + "b.status,"
-            + "a.collection) " + "from ModelTaskRecordExt a " + "left join TaskRecord b on a.id=b.id "
-            + "left join ModelTaskExt c on b.tid=c.id " + "left join Task d on b.tid=d.id where 1=1 ";
+    QModelTaskRecordExt modelTaskRecordExt = QModelTaskRecordExt.modelTaskRecordExt;
+    QTaskRecord taskRecord = QTaskRecord.taskRecord;
+    QModelTaskExt modelTaskExt = QModelTaskExt.modelTaskExt;
+    QTask task = QTask.task;
 
-    Map<String, Object> params = new HashMap<>(3);
-
-    jql = buildQueryString(modelTaskRecordQo, jql, params);
-
-    List<ModelTaskRecordViewDTO> list = baseTemplate.list(ModelTaskRecordViewDTO.class, jql, params, offset, limit);
+    List<ModelTaskRecordViewDTO> list = jqf.select(
+            Projections.fields(ModelTaskRecordViewDTO.class, taskRecord.id, modelTaskExt.mid, task.name, taskRecord.status,
+                modelTaskRecordExt.collection))
+        .from(modelTaskRecordExt)
+        .leftJoin(taskRecord)
+        .on(modelTaskRecordExt.id.eq(taskRecord.id))
+        .leftJoin(modelTaskExt)
+        .on(taskRecord.tid.eq(modelTaskExt.id))
+        .leftJoin(task)
+        .on(taskRecord.tid.eq(task.id))
+        .where(this.buildQuery(modelTaskRecordQo, modelTaskRecordExt, taskRecord, modelTaskExt, task)
+            .toArray(Predicate[]::new))
+        .fetch();
 
     Pagination pagination = new Pagination();
     pagination.setOffset(offset);
@@ -51,31 +67,40 @@ public class ModelTaskRecordBizImpl extends BaseBiz<ModelTaskRecordExt, Long, Mo
 
   public Long count(ModelTaskRecordQo modelTaskRecordQo) {
 
-    String jql = "select count(1) " + "from ModelTaskRecordExt a " + "left join TaskRecord b on a.id=b.id "
-        + "left join ModelTaskExt c on b.tid=c.id " + "left join Task d on b.tid=d.id where 1=1 ";
+    QModelTaskRecordExt modelTaskRecordExt = QModelTaskRecordExt.modelTaskRecordExt;
+    QTaskRecord taskRecord = QTaskRecord.taskRecord;
+    QModelTaskExt modelTaskExt = QModelTaskExt.modelTaskExt;
+    QTask task = QTask.task;
 
-    Map<String, Object> params = new HashMap<>(3);
-    jql = buildQueryString(modelTaskRecordQo, jql, params);
-
-    return baseTemplate.count(jql, params);
+    return jqf.selectOne()
+        .from(modelTaskRecordExt)
+        .leftJoin(taskRecord)
+        .on(modelTaskRecordExt.id.eq(taskRecord.id))
+        .leftJoin(modelTaskExt)
+        .on(taskRecord.tid.eq(modelTaskExt.id))
+        .leftJoin(task)
+        .on(taskRecord.tid.eq(task.id))
+        .where(this.buildQuery(modelTaskRecordQo, modelTaskRecordExt, taskRecord, modelTaskExt, task)
+            .toArray(Predicate[]::new))
+        .fetchCount();
   }
 
-  private String buildQueryString(ModelTaskRecordQo modelTaskRecordQo, String jql, Map<String, Object> params) {
+  private List<Predicate> buildQuery(ModelTaskRecordQo modelTaskRecordQo, QModelTaskRecordExt modelTaskRecordExt,
+      QTaskRecord taskRecord, QModelTaskExt modelTaskExt, QTask task) {
+
+    List<Predicate> predicates = new ArrayList<>();
     if (modelTaskRecordQo.getMid() != null) {
-      jql += " and c.mid=:mid";
-      params.put("mid", modelTaskRecordQo.getMid());
+      predicates.add(modelTaskExt.mid.eq(modelTaskRecordQo.getMid()));
     }
 
     if (modelTaskRecordQo.getStatus() != null) {
-      jql += " and b.status=:status";
-      params.put("status", modelTaskRecordQo.getStatus());
+      predicates.add(taskRecord.status.eq(modelTaskRecordQo.getStatus()));
     }
 
     if (modelTaskRecordQo.getName() != null && modelTaskRecordQo.getName().length() > 0) {
-      jql += " and d.name like :name";
-      params.put("name", "%" + modelTaskRecordQo.getName() + "%");
+      predicates.add(task.name.like(modelTaskRecordQo.getName()));
     }
-    return jql;
+    return predicates;
   }
 
   @Override

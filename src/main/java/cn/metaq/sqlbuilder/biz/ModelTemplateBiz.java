@@ -3,8 +3,8 @@ package cn.metaq.sqlbuilder.biz;
 import cn.metaq.common.core.dto.Pagination;
 import cn.metaq.data.Biz;
 import cn.metaq.data.QueryBiz;
-import cn.metaq.sqlbuilder.model.ModelTemplate;
-import cn.metaq.sqlbuilder.qo.ModelTemplateQo;
+import cn.metaq.sqlbuilder.model.entity.ModelTemplate;
+import cn.metaq.sqlbuilder.model.qo.ModelTemplateQo;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 

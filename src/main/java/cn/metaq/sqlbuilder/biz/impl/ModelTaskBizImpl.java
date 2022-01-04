@@ -6,16 +6,21 @@ import cn.metaq.data.jpa.BaseTemplate;
 import cn.metaq.sqlbuilder.biz.ModelTaskBiz;
 import cn.metaq.sqlbuilder.dao.ModelTaskExtDao;
 import cn.metaq.sqlbuilder.dao.TaskDao;
-import cn.metaq.sqlbuilder.dto.ModelTaskDTO;
-import cn.metaq.sqlbuilder.model.ModelTaskExt;
-import cn.metaq.sqlbuilder.model.Task;
-import cn.metaq.sqlbuilder.qo.ModelTaskQo;
+import cn.metaq.sqlbuilder.model.dto.ModelTaskDTO;
+import cn.metaq.sqlbuilder.model.entity.ModelTaskExt;
+import cn.metaq.sqlbuilder.model.entity.QModelTaskExt;
+import cn.metaq.sqlbuilder.model.entity.QTask;
+import cn.metaq.sqlbuilder.model.entity.Task;
+import cn.metaq.sqlbuilder.model.qo.ModelTaskQo;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +30,8 @@ import org.springframework.stereotype.Service;
  * @author zantang
  */
 @Service
-public class ModelTaskBizImpl extends BaseBiz<ModelTaskExt, Long, ModelTaskExtDao> implements ModelTaskBiz {
+public class ModelTaskBizImpl extends BaseBiz<ModelTaskExt, ModelTaskExt, Long, ModelTaskExtDao> implements
+    ModelTaskBiz {
 
   /** task */
   @Resource
@@ -33,20 +39,25 @@ public class ModelTaskBizImpl extends BaseBiz<ModelTaskExt, Long, ModelTaskExtDa
 
   @Resource
   private BaseTemplate baseTemplate;
+  @Autowired
+  private JPAQueryFactory jqf;
 
   @Override
   public Pagination<ModelTaskDTO> list(ModelTaskQo modelTaskQo, int offset, int limit) {
 
-    String jql =
-        "select new ai.bailian.sqlbuilder.model.dto.ModelTaskDTO(a.id," + "a.name," + "a.type," + "a.mode," + "b.build,"
-            + "b.improvement," + "b.columns," + "b.mid," + "a.createdBy," + "a.createdTs," + "a.updatedBy,"
-            + "a.updatedTs)" + " from Task a left join ModelTaskExt b on a.id=b.id where a.type=0";
+    QTask task = QTask.task;
+    QModelTaskExt modelTaskExt = QModelTaskExt.modelTaskExt;
 
-    Map<String, Object> params = new HashMap<>(3);
-
-    jql = buildQueryString(modelTaskQo, jql, params);
-
-    List<ModelTaskDTO> list = baseTemplate.list(ModelTaskDTO.class, jql, params, offset, limit);
+    List<ModelTaskDTO> list = jqf.select(
+            Projections.fields(ModelTaskDTO.class, task.id, task.name, task.type, task.mode, modelTaskExt.build,
+                modelTaskExt.improve, modelTaskExt.columns, modelTaskExt.mid, task.createdBy, task.createdTs,
+                task.updatedBy, task.updatedTs))
+        .from(task)
+        .leftJoin(modelTaskExt)
+        .on(task.id.eq(modelTaskExt.id))
+        .where(task.type.eq(0))
+        .where(this.buildQuery(modelTaskQo,task,modelTaskExt).toArray(com.querydsl.core.types.Predicate[]::new))
+        .fetch();
 
     Pagination pagination = new Pagination();
     pagination.setOffset(offset);
@@ -56,28 +67,20 @@ public class ModelTaskBizImpl extends BaseBiz<ModelTaskExt, Long, ModelTaskExtDa
     return pagination;
   }
 
-  /**
-   * 构建查询
-   *
-   * @param queryDTO
-   * @param jql
-   * @param params
-   * @return
-   */
-  private String buildQueryString(ModelTaskQo queryDTO, String jql, Map<String, Object> params) {
+  private List<com.querydsl.core.types.Predicate> buildQuery(ModelTaskQo queryDTO,QTask task,QModelTaskExt modelTaskExt){
+
+    List<com.querydsl.core.types.Predicate> predicates = new ArrayList<>();
+
     if (queryDTO.getMid() != null) {
-      jql += " and b.mid=:mid";
-      params.put("mid", queryDTO.getMid());
+      predicates.add(modelTaskExt.mid.eq(queryDTO.getMid()));
     }
     if (queryDTO.getMode() != null) {
-      jql += " and a.mode=:mode";
-      params.put("mode", queryDTO.getMode());
+      predicates.add(task.mode.eq(queryDTO.getMode()));
     }
     if (queryDTO.getName() != null && queryDTO.getName().length() > 0) {
-      jql += " and a.name like :name";
-      params.put("name", "%" + queryDTO.getName() + "%");
+      predicates.add(task.name.like(queryDTO.getName()));
     }
-    return jql;
+    return predicates;
   }
 
   @Override
@@ -128,12 +131,16 @@ public class ModelTaskBizImpl extends BaseBiz<ModelTaskExt, Long, ModelTaskExtDa
 
   public Long count(ModelTaskQo queryDTO) {
 
-    String jql = "select count(1) from Task a left join ModelTaskExt b on a.id=b.id where a.type=0";
+    QTask task = QTask.task;
+    QModelTaskExt modelTaskExt = QModelTaskExt.modelTaskExt;
 
-    Map<String, Object> params = new HashMap<>(3);
-    jql = buildQueryString(queryDTO, jql, params);
-
-    return baseTemplate.count(jql, params);
+    return jqf.selectOne()
+        .from(task)
+        .leftJoin(modelTaskExt)
+        .on(task.id.eq(modelTaskExt.id))
+        .where(task.type.eq(0))
+        .where(this.buildQuery(queryDTO,task,modelTaskExt).toArray(com.querydsl.core.types.Predicate[]::new))
+        .fetchCount();
   }
 
   @Override

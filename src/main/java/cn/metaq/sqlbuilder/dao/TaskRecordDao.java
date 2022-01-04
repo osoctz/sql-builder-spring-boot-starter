@@ -1,7 +1,7 @@
 package cn.metaq.sqlbuilder.dao;
 
 import cn.metaq.data.jpa.BaseDao;
-import cn.metaq.sqlbuilder.model.TaskRecord;
+import cn.metaq.sqlbuilder.model.entity.TaskRecord;
 import org.springframework.stereotype.Repository;
 
 /**

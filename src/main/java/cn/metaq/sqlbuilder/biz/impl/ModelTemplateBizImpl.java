@@ -4,8 +4,8 @@ import cn.metaq.common.core.dto.Pagination;
 import cn.metaq.data.jpa.BaseBiz;
 import cn.metaq.sqlbuilder.biz.ModelTemplateBiz;
 import cn.metaq.sqlbuilder.dao.ModelTemplateDao;
-import cn.metaq.sqlbuilder.model.ModelTemplate;
-import cn.metaq.sqlbuilder.qo.ModelTemplateQo;
+import cn.metaq.sqlbuilder.model.entity.ModelTemplate;
+import cn.metaq.sqlbuilder.model.qo.ModelTemplateQo;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.Predicate;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @author tom
  */
 @Service
-public class ModelTemplateBizImpl extends BaseBiz<ModelTemplate, Long, ModelTemplateDao> implements ModelTemplateBiz {
+public class ModelTemplateBizImpl extends BaseBiz<ModelTemplate,ModelTemplate, Long, ModelTemplateDao> implements ModelTemplateBiz {
 
   @Override
   public <R> Pagination<R> list(Class<R> var1, ModelTemplateQo modelTemplateQo, int offset, int limit) {

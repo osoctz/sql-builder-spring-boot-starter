@@ -1,4 +1,4 @@
-package cn.metaq.sqlbuilder.model;
+package cn.metaq.sqlbuilder.model.entity;
 
 import cn.metaq.common.core.IEntity;
 import cn.metaq.sqlbuilder.util.UserContextUtils;
