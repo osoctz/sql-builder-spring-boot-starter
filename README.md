@@ -350,7 +350,7 @@ SELECT t0.name AS _name0 FROM test_srv.t_person2 t0 INNER JOIN test_srv.t_person
 
 ```
 
-## 差集示例
+## 差集
 ```json5
 {
   "type": "DIFF",
@@ -418,7 +418,7 @@ WHERE NOT EXISTS (
     WHERE _j0.id = _u0.id
     )
 ```
-##并集
+## 并集
 ```json5
 {
   "type": "UNION",
